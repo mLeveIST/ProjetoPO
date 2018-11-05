@@ -6,7 +6,7 @@ O projeto esta separado em 4 pastas:
 * src: Pasta de sourcefiles onde estão guardados todos os ficheiros .java a editar do projeto, e respetiva hierarquia;
 * bin: Pasta de classfiles onde estão guradados todos os ficheiros .class do projeto e respetiva hierarquia;
 * lib: Pasta de bibliotecas externas (.jar) a usar no projeto;
-* res: Pasta de recursos a usar no projeto.
+* res: Pasta de recursos a usar no projeto (.txt, .png, etc).
 
 # Compilar
 Para compilar o projeto todo, usar o comando:<p>
