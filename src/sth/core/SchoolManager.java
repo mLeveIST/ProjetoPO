@@ -17,6 +17,7 @@ public class SchoolManager {
 
   //FIXME add object attributes if needed
   School _school;
+  private Person _user;
   //FIXME implement constructors if needed
   
   /**
