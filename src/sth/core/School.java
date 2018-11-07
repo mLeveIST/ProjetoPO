@@ -29,7 +29,7 @@ public class School implements java.io.Serializable {
 
 	public void createDiscipline(String name, String course, int maxStudents, int teacher) {
 
-	
+		System.out.println("Hi");
 	}
 
 	/**
