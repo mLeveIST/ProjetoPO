@@ -29,11 +29,7 @@ public class School implements java.io.Serializable {
 
 	public void createDiscipline(String name, String course, int maxStudents, int teacher) {
 
-		for (Course c : _courses)
-			if (c.getName().equals(course))
-				if (_people.get(teacher) != null) {
-					
-				}
+	
 	}
 
 	/**
