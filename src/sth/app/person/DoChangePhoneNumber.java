@@ -12,20 +12,23 @@ import sth.core.SchoolManager;
  */
 public class DoChangePhoneNumber extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
+  private Input<Integer> _input;
 
   /**
    * @param receiver
    */
   public DoChangePhoneNumber(SchoolManager receiver) {
     super(Label.CHANGE_PHONE_NUMBER, receiver);
-    //FIXME initialize input fields if needed
+    _input = _form.addIntegerInput(Message.requestPhoneNumber());
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    //FIXME implement command
+    _form.parse();
+    _receiver.changeTeleNum(_input.value());
+    _display.addLine(_receiver.showPerson());
+    _display.display();
   }
 
 }
