@@ -11,7 +11,7 @@ import sth.core.SchoolManager;
  */
 public class DoSearchPerson extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
+  private Input<String> _input;
   
   /**
    * @param receiver
@@ -24,7 +24,9 @@ public class DoSearchPerson extends Command<SchoolManager> {
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    //FIXME implement command
+    _form.parse();
+    _display.addLine(_receiver.searchPerson(_input.value()));
+    _display.display();  
   }
 
 }
