@@ -24,7 +24,7 @@ public class DoShowPerson extends Command<SchoolManager> {
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    //FIXME implement command
-  }
+    _display.addLine(_receiver.showPerson());
+    _display.display();  }
 
 }
