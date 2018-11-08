@@ -73,7 +73,20 @@ public class SchoolManager {
     //FIXME implement predicate
     return false;
   }
-
-  //FIXME implement other methods (in general, one for each command in sth-app)
   
+  public void changeTeleNum(int num){
+  }
+
+  public String showPerson(){
+      return "";
+  }
+
+  public String showAllPersons(){
+      return "";
+  }
+
+  public String searchPerson(String name){
+      return "";
+  }
+
 }
