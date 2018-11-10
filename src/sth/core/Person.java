@@ -39,6 +39,10 @@ public abstract class Person implements Comparable<Person> {
 		return _compByName;
 	}
 
+	public void setTeleNum(int newTeleNum) {
+		_teleNum = newTeleNum;
+	}
+
 	@Override
 	public String toString() {
 		return "|" + _id + "|" + _teleNum + "|" + _name;
