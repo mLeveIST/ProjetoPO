@@ -3,6 +3,10 @@ package sth.core;
 import sth.core.exception.BadEntryException;
 import sth.core.exception.NoSuchPersonIdException;
 
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.IOException;
 
 public class School implements java.io.Serializable {
@@ -20,20 +24,20 @@ public class School implements java.io.Serializable {
 		_people = new HashMap<>();
 	}
 
-	public createCourse(String name) {
-		Course course = new Course(name);
+	public void createCourse(String name) {
+		//Course course = new Course();
 
-		if (course != null)
-			_courses.add(course);
+		//if (course != null)
+		//	_courses.add(course);
 	}
 
 	public void createDiscipline(String name, String course, int maxStudents, int teacher) {
 
-		for (Course c : _courses)
-			if (c.getName().equals(course))
-				if (_people.get(teacher) != null) {
+		//for (Course c : _courses)
+		//	if (c.getName().equals(course))
+		//		if (_people.get(teacher) != null) {
 					
-				}
+		//		}
 	}
 
 	/**
@@ -46,7 +50,6 @@ public class School implements java.io.Serializable {
 	}
 
 	private class SchoolParser {
-
 
 	}	
 }
