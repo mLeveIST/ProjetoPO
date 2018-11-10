@@ -23,5 +23,4 @@ public class DoOpenPersonnelMenu extends Command<SchoolManager> {
     Menu menu = new PersonnelMenu(_receiver);
     menu.open();
   }
-
 }
