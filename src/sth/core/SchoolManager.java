@@ -89,4 +89,14 @@ public class SchoolManager {
       return "";
   }
 
+  public void openFile(Object obj){
+    if (obj instanceof  School )
+      _school = (School) obj;
+  }
+
+  public School saveFile(){
+    return _school;
+  }
+
+
 }
