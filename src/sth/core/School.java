@@ -31,10 +31,7 @@ public class School implements java.io.Serializable {
 	}
 
 	public Course parseCourse(String name) {
-
-		// ------ Uncomment after Course is implemented --------
-
-		/*Course course;
+		Course course;
 		
 		for (Course c : _courses)
 			if (c.getName().equals(name))
@@ -42,8 +39,7 @@ public class School implements java.io.Serializable {
 
 		course = new Course(name);
 		_courses.add(course);
-		return course;*/
-		return null;
+		return course;
 	}
 
 	public Person addPerson(String type, int id, int phoneNum, String name) throws BadEntryException {
@@ -51,13 +47,9 @@ public class School implements java.io.Serializable {
 
 		switch (type) {
 			case "ALUNO":
-				// -!-!-!-!-!- //
-				//person = new Student(id, phoneNum, name, false);
-				//break;
+				person = new Student(id, phoneNum, name, false);
 			case "DELEGADO":
-				// -!-!-!-!-!- //
-				//person = new Student(id, phoneNum, name, true);
-				//break;
+				person = new Student(id, phoneNum, name, true);
 			case "DOCENTE":
 				person = new Teacher(id, phoneNum, name);
 				break;
@@ -121,11 +113,9 @@ public class School implements java.io.Serializable {
 				throw new BadEntryException("Invalid line: " + line);
 
 			Course course = parseCourse(components[0]);
-			// -!-!-!-!-!- //
-			//Discipline discipline = course.parseDiscipline(components[1])
 
-			// -!-!-!-!-!- //
-			//_currPerson.addContext(course, discipline);
+			Discipline discipline = course.parseDiscipline(components[1]);
+			_currPerson.addContext(course, discipline);
 		}
 	}	
 }
