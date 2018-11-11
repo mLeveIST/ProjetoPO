@@ -8,7 +8,7 @@ public abstract class Person implements Comparable<Person> {
 	private int _phoneNum;
 	private String _name;
 
-	// Might turn to method or declare instead at sort call outside Person
+	// Might turn to method or declare instead at Collection.sort call outside Person
 	private Comparator<Person> _compByName = new Comparator<Person>() {
 
 		@Override
