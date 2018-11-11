@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 public abstract class Person implements Comparable<Person> {
 
-	private String _name;
 	private int _id;
-	private int _teleNum;
+	private int _phoneNum;
+	private String _name;
 
 	// Might turn to method or declare instead at sort call outside Person
 	private Comparator<Person> _compByName = new Comparator<Person>() {
@@ -17,40 +17,42 @@ public abstract class Person implements Comparable<Person> {
 		}
 	};
 
-	public Person(String name, int id, int teleNum) {
-		_name = name;
+	Person(int id, int phoneNum, String name) {
 		_id = id;
-		_teleNum = teleNum;
+		_phoneNum = phoneNum;
+		_name = name;
 	}
 
-	public String getName() {
+	String getName() {
 		return _name;
 	}
 
-	public int getId() {
+	int getId() {
 		return _id;
 	}
 
-	public int getTeleNum() {
-		return _teleNum;
+	int getPhoneNum() {
+		return _phoneNum;
 	}
 
-	public Comparator<Person> getComparatorByName() {
+	Comparator<Person> getComparatorByName() {
 		return _compByName;
 	}
 
-	public void setTeleNum(int newTeleNum) {
-		_teleNum = newTeleNum;
+	void setPhoneNum(int newPhoneNum) {
+		_phoneNum = newPhoneNum;
 	}
 
-	@Override
-	public String toString() {
-		return "|" + _id + "|" + _teleNum + "|" + _name;
-	}
+	abstract void addContext(Course course, Discipline discipline);
 
 	@Override
 	public int compareTo(Person p) {
 		return _id - p._id;
+	}
+
+	@Override
+	public String toString() {
+		return "|" + _id + "|" + _phoneNum + "|" + _name;
 	}
 
 	// ******* IF A SET OF PERSONS IS USED **********
