@@ -1,7 +1,6 @@
 package sth.app.main;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.Input;
@@ -14,28 +13,41 @@ import sth.core.SchoolManager;
  */
 public class DoOpen extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
-  
+  Input<String> _fileName;
+
   /**
    * @param receiver
    */
   public DoOpen(SchoolManager receiver) {
     super(Label.OPEN, receiver);
-    //FIXME initialize input fields if needed
+    _fileName = _form.addStringInput(Message.openFile());
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    /*
+      ObjectInputStream objIn = null;
+      _form.parse();
     try {
-      //FIXME implement command
+
+      FileInputStream fpIn = new FileInputStream(_fileName.value());
+      objIn = new ObjectInputStream(fpIn);
+      Object anObject = objIn.readObject();
+      _receiver.openFile(anObject);
+
+      // Colocar LogIn --
     } catch (FileNotFoundException fnfe) {
       _display.popup(Message.fileNotFound());
     } catch (ClassNotFoundException | IOException e) {
       e.printStackTrace();
+    } finally {
+        try {
+            if(objIn != null)
+                objIn.close();
+        } catch(IOException x){
+            x.printStackTrace();
+        }
     }
-    */
   }
 
 }
