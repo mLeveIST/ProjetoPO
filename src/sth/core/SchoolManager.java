@@ -18,7 +18,14 @@ public class SchoolManager {
   //FIXME add object attributes if needed
   School _school;
   private Person _user;
-  //FIXME implement constructors if needed
+
+  public SchoolManager(String schoolName){
+    _school = new School(schoolName);
+  }
+
+  public SchoolManager(){
+      _school = new School("School");
+  }
   
   /**
    * @param datafile
@@ -39,46 +46,46 @@ public class SchoolManager {
    * @throws NoSuchPersonIdException if there is no uers with the given identifier
    */
   public void login(int id) throws NoSuchPersonIdException {
-    //FIXME implement method
+    /*_user = _school.getPerson(id);*/
+
   }
 
   /**
    * @return true when the currently logged in person is an administrative
    */
   public boolean isLoggedUserAdministrative() {
-    //FIXME implement predicate
-    return false;
+    return _user instanceof Employee;
   }
 
   /**
    * @return true when the currently logged in person is a professor
    */
   public boolean isLoggedUserProfessor() {
-    //FIXME implement predicate
-    return false;
+    return _user instanceof Teacher;
   }
 
   /**
    * @return true when the currently logged in person is a student
    */
   public boolean isLoggedUserStudent() {
-    //FIXME implement predicate
-    return false;
+
+    return _user instanceof Student && ((Student)_user).isRepresentative();
   }
 
   /**
    * @return true when the currently logged in person is a representative
    */
   public boolean isLoggedUserRepresentative() {
-    //FIXME implement predicate
-    return false;
+    return _user instanceof Student && ((Student)_user).isRepresentative();
   }
   
   public void changeTeleNum(int num){
+    _user.setPhoneNum(num);
   }
 
   public String showPerson(){
-      return "";
+     return _user.toString();
+
   }
 
   public String showAllPersons(){
