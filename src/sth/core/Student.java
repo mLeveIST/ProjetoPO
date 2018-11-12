@@ -25,12 +25,13 @@ public class Student extends Person {
     @Override
     void addContext(Course course, Discipline discipline) {
         _course = course;
-        if( _numDisciplines == 6)
-            System.out.println("Erro");
-        else {
-            _disciplines[_numDisciplines] = discipline;
-            _numDisciplines++;
+        for(Discipline disc : _disciplines){
+            if (_disciplines.equals(discipline) |_numDisciplines == 6)
+                System.out.println("Erro"); //Retornar False =??
         }
+
+        _disciplines[_numDisciplines] = discipline;
+        _numDisciplines++;
     }
 
     void makeStudent(){
