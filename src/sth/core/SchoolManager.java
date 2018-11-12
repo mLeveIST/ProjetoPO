@@ -30,7 +30,6 @@ public class SchoolManager {
   /**
    * @param datafile
    * @throws ImportFileException
-   * @throws InvalidCourseSelectionException
    */
   public void importFile(String datafile) throws ImportFileException {
     try {
@@ -46,8 +45,7 @@ public class SchoolManager {
    * @throws NoSuchPersonIdException if there is no uers with the given identifier
    */
   public void login(int id) throws NoSuchPersonIdException {
-    /*_user = _school.getPerson(id);*/
-
+    /*_user = _school.getPerson(id); */
   }
 
   /**
@@ -68,8 +66,7 @@ public class SchoolManager {
    * @return true when the currently logged in person is a student
    */
   public boolean isLoggedUserStudent() {
-
-    return _user instanceof Student && ((Student)_user).isRepresentative();
+    return _user instanceof Student;
   }
 
   /**
