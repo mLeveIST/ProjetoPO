@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Discipline implements  Comparable<Discipline>{
 
+    private static final int MAX_STUDENTS_DISCIPLINE = 200;
     private Course _course;
     private String _name;
 
@@ -30,15 +31,17 @@ public class Discipline implements  Comparable<Discipline>{
     }
 
     void enrollStudent(Student student){
-        if(_students.contains(student) == true)
+        if(_students.contains(student) == true && _students.size() <= MAX_STUDENTS_DISCIPLINE)
             System.out.println("Nao é suposto");
         else
             _students.add(student);
     }
 
     void addTeacher(Teacher teacher){
-        // Falta verificar se o professor ja pertence há disciplina
-        _teachers.add(teacher);
+        if(_teachers.contains(teacher) == true)
+            System.out.println("Não é suposto");
+        else
+            _teachers.add(teacher);
     }
 
     String getName(){
@@ -75,4 +78,6 @@ public class Discipline implements  Comparable<Discipline>{
     public int compareTo(Discipline d) {
         return _name.compareTo(d.getName());
     }
+
+
 }
