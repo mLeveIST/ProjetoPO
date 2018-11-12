@@ -29,7 +29,7 @@ public class DoSave extends Command<SchoolManager> {
   @Override
   public final void execute() {
     ObjectOutputStream objOut = null;
-    if(_fileName == null)
+    if(_fileName.value() == null)
         _form.parse();
 
     try {
