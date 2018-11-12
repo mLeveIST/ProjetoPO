@@ -4,6 +4,7 @@ import sth.core.exception.BadEntryException;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Student extends Person {
     private static final int MAX_NUM_DISCIPLINES = 6;
@@ -54,9 +55,20 @@ public class Student extends Person {
     public String toString() {
 
         String info = _representative ? "DELEGADO|" + getId() + "|" + getPhoneNum() + "|" + getName() + "\n" : super.toString();
-        Arrays.sort(_disciplines);
-        for(Discipline d : _disciplines)
-            info += "* " + _course + " - " + d.getName() + "\n";
+        Arrays.sort(_disciplines, new Comparator<Discipline>(){
+            public int compare(Discipline d1, Discipline d2){
+                if (d1 == null && d1 == null)
+                    return 0;
+                else if (d1 == null)
+                    return -1;
+                else if (d2 == null)
+                    return 1;
+                return  d1.compareTo(d2);
+            }
+        });
+
+        for(int i=0; i < _numDisciplines ; i++)
+            info += "* " + _course.getName() + " - " + _disciplines[i].getName() + "\n";
 
         return info;
     }
