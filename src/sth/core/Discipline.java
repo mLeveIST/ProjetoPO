@@ -65,8 +65,9 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
     public String showStudents() {
         String info = "";
-        for (Student a : _students)
+        for (Student a : _students) {
             info += a.toString();
+        }
 
         return info;
     }
@@ -81,7 +82,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
     @Override
     public int compareTo(Discipline d) {
-        int equal = d.getCourse().compareTo(_course);
+        int equal = _course.compareTo(d.getCourse());
 
         if(equal == 0)
             return _name.compareTo(d.getName());
