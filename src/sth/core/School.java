@@ -35,7 +35,7 @@ public class School implements java.io.Serializable {
 	String showAllPersons() {
 		String info = "";
 
-		List<Person> people = (List<Person>) _people.values();
+		List<Person> people = new ArrayList<>(_people.values());
 		Collections.sort(people);
 
 		for (Person p : people)
@@ -47,7 +47,7 @@ public class School implements java.io.Serializable {
 	String searchPerson(String name) {
 		String info = "";
 
-		List<Person> people = (List<Person>) _people.values();
+		List<Person> people = new ArrayList<>(_people.values());
 		Collections.sort(people, Person.getComparatorByName());
 
 		for (Person p : people)
@@ -85,8 +85,10 @@ public class School implements java.io.Serializable {
 		switch (type) {
 			case "ALUNO":
 				person = new Student(id, phoneNum, name, false);
+				break;
 			case "DELEGADO":
 				person = new Student(id, phoneNum, name, true);
+				break;
 			case "DOCENTE":
 				person = new Teacher(id, phoneNum, name);
 				break;
