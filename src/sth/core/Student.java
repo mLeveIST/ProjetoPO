@@ -7,13 +7,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Student extends Person {
+public class Student extends Person implements java.io.Serializable {
+
     private static final int MAX_NUM_DISCIPLINES = 6;
 
     private List<Discipline> _disciplines;
     private int _numDisciplines;
     private Course _course;
     private boolean _representative;
+
 
     public Student(int id, int phoneNum, String name, boolean representative){
         super(id, phoneNum, name);
