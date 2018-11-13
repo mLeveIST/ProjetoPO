@@ -30,6 +30,7 @@ public class SchoolManager {
 		}
 	}
 
+
 	public void login(int id) throws NoSuchPersonIdException {
 		_user = _school.getPerson(id);
 	}
@@ -53,11 +54,10 @@ public class SchoolManager {
 	// Portal Principal
 
 	public void openState(Object obj) throws NoSuchPersonIdException {
-		if (obj instanceof School) {
-			School newSchool = (School) obj;
-			newSchool.getPerson(_user.getId());
-			_school = newSchool;
-		}
+		School newSchool = (School) obj;
+		newSchool.getPerson(_user.getId());
+		_school = newSchool;
+
 	}
 
 	public School saveState() {
