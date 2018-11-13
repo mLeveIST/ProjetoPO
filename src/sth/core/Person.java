@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import sth.core.exception.BadEntryException;
 
-public abstract class Person implements Comparable<Person> {
+public abstract class Person implements Comparable<Person>, java.io.Serializable {
 
 	private int _id;
 	private int _phoneNum;
@@ -49,13 +49,6 @@ public abstract class Person implements Comparable<Person> {
 		throw new BadEntryException("Should not have extra context: " + context);
 	}
 
-	// ----- UPDATE METHOD IN STUDENT TO ABOVE ------
-	//!_!_!_!_!_!_!_!_!_!_!_!_!_!//
-	void addContext(Course c, Discipline d) throws BadEntryException {
-		throw new BadEntryException("Should not have extra context");
-	}
-	//!_!_!_!_!_!_!_!_!_!_!_!_!_!//
-
 	@Override
 	public int compareTo(Person p) {
 		return _id - p._id;
@@ -63,7 +56,7 @@ public abstract class Person implements Comparable<Person> {
 
 	@Override
 	public String toString() {
-		return "|" + _id + "|" + _phoneNum + "|" + _name;
+		return "|" + _id + "|" + _phoneNum + "|" + _name + "\n";
 	}
 
 	// ******* IF A SET OF PERSONS IS USED **********
