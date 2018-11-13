@@ -1,23 +1,25 @@
 package sth.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class Course implements Comparable<Course> {
+public class Course implements Comparable<Course> , java.io.Serializable{
 
     private static final int MAX_REPRESENTATIVES = 7;
     private static int _numRepresentatives;
 
     private String _name;
     private List<Discipline> _disciplines;
-    private List<Student> _students;
+    private Set<Student> _students;
 
     public String getName(){
         return _name;
     }
     public Course(String name){
         _disciplines = new ArrayList<>();
-        _students = new ArrayList<>();
+        _students = new HashSet<>();
         _name = name;
     }
 
@@ -33,10 +35,10 @@ public class Course implements Comparable<Course> {
     }
 
     void addStudent(Student student) {
-        if (!student.isRepresentative())
+        if (!student.isRepresentative() && !_students.contains(student))
             _students.add(student);
 
-        else if (_numRepresentatives != MAX_REPRESENTATIVES) {
+        else if (_numRepresentatives != MAX_REPRESENTATIVES && !_students.contains(student)) {
             _numRepresentatives++;
             _students.add(student);
         } else

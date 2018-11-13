@@ -1,5 +1,5 @@
 package sth.core;
 
-public class Notification {
+public class Notification implements java.io.Serializable {
 	
 }

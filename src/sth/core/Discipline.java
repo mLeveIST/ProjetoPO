@@ -5,7 +5,7 @@ import sth.core.exception.NoSuchProjectIdException;
 
 import java.util.*;
 
-public class Discipline implements  Comparable<Discipline>{
+public class Discipline implements  Comparable<Discipline>, java.io.Serializable{
 
     private static final int MAX_STUDENTS_DISCIPLINE = 200;
     private Course _course;
@@ -29,7 +29,7 @@ public class Discipline implements  Comparable<Discipline>{
     }
 
     void enrollStudent(Student student){
-        if(_students.contains(student) == true && _students.size() <= MAX_STUDENTS_DISCIPLINE)
+        if(_students.contains(student) == true || _students.size() > MAX_STUDENTS_DISCIPLINE)
             System.out.println("Nao é suposto");
         else
             _students.add(student);
