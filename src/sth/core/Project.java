@@ -5,7 +5,7 @@ import java.util.Map;
 
 import sth.core.exception.NoSuchProjectIdException;
 
-public class Project implements Comparable<Project> {
+public class Project implements Comparable<Project>, java.io.Serializable {
 
 	private String _name;
 	private String _description;
