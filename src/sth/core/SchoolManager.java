@@ -1,106 +1,142 @@
 package sth.core;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import sth.core.exception.BadEntryException;
 import sth.core.exception.ImportFileException;
+import sth.core.exception.NoSuchDisciplineIdException;
 import sth.core.exception.NoSuchPersonIdException;
+import sth.core.exception.NoSuchProjectIdException;
 
-import java.io.IOException;
-import java.io.FileNotFoundException;
-
-
-//FIXME import other classes if needed
-
-/**
- * The façade class.
- */
 public class SchoolManager {
 
-  //FIXME add object attributes if needed
-  School _school;
-  private Person _user;
+	School _school;
+	private Person _user;
 
-  public SchoolManager(String schoolName){
-    _school = new School(schoolName);
-  }
+	public SchoolManager() {
+		_school = new School("School");
+	}
 
-  public SchoolManager(){
-      _school = new School("School");
-  }
-  
-  /**
-   * @param datafile
-   * @throws ImportFileException
-   */
-  public void importFile(String datafile) throws ImportFileException {
-    try {
-      _school.importFile(datafile);
-    } catch (IOException | BadEntryException e) {
-      throw new ImportFileException(e);
-    }
-  }
+	public SchoolManager(String schoolName) {
+		_school = new School(schoolName);
+	}
 
-  /**
-   * Do the login of the user with the given identifier.
-   * @param id identifier of the user to login
-   * @throws NoSuchPersonIdException if there is no uers with the given identifier
-   */
-  public void login(int id) throws NoSuchPersonIdException {
-    /*_user = _school.getPerson(id); */
-  }
+	public void importFile(String dataFile) throws ImportFileException {
+		try {
+			_school.importFile(dataFile);
+		} catch (IOException | BadEntryException e) {
+			throw new ImportFileException(e);
+		}
+	}
 
-  /**
-   * @return true when the currently logged in person is an administrative
-   */
-  public boolean isLoggedUserAdministrative() {
-    return _user instanceof Employee;
-  }
+	public void login(int id) throws NoSuchPersonIdException {
+		_user = _school.getPerson(id);
+	}
 
-  /**
-   * @return true when the currently logged in person is a professor
-   */
-  public boolean isLoggedUserProfessor() {
-    return _user instanceof Teacher;
-  }
+	public boolean isLoggedUserAdministrative() {
+		return _user instanceof Employee;
+	}
 
-  /**
-   * @return true when the currently logged in person is a student
-   */
-  public boolean isLoggedUserStudent() {
-    return _user instanceof Student;
-  }
+	public boolean isLoggedUserProfessor() {
+		return _user instanceof Teacher;
+	}
 
-  /**
-   * @return true when the currently logged in person is a representative
-   */
-  public boolean isLoggedUserRepresentative() {
-    return _user instanceof Student && ((Student)_user).isRepresentative();
-  }
-  
-  public void changeTeleNum(int num){
-    _user.setPhoneNum(num);
-  }
+	public boolean isLoggedUserStudent() {
+		return _user instanceof Student;
+	}
 
-  public String showPerson(){
-     return _user.toString();
+	public boolean isLoggedUserRepresentative() {
+		return _user instanceof Student && ((Student) _user).isRepresentative();
+	}
 
-  }
+	// Portal Principal
 
-  public String showAllPersons(){
-      return "";
-  }
+	public void openState(Object obj) throws NoSuchPersonIdException {
+		if (obj instanceof School) {
+			School newSchool = (School) obj;
+			newSchool.getPerson(_user.getId());
+			_school = newSchool;
+		}
+	}
 
-  public String searchPerson(String name){
-      return "";
-  }
+	public School saveState() {
+		return _school;
+	}
 
-  public void openFile(Object obj){
-    if (obj instanceof  School )
-      _school = (School) obj;
-  }
+	// Portal Pessoal
 
-  public School saveFile(){
-    return _school;
-  }
+	public String showPerson() {
+		return _user.toString();
+	}
 
+	public String showAllPersons() {
+		return _school.showAllPersons();
+	}
 
+	public String searchPerson(String name) {
+		return _school.searchPerson(name);
+	}
+
+	public void changePhoneNumber(int phoneNum) {
+		_user.setPhoneNumber(phoneNum);
+	}
+
+	// Portal Docente
+
+	public void createProject(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
+		((Teacher)_user).createProject(disName, projName);
+	}
+
+	public void closeProject(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
+		((Teacher)_user).closeProject(disName, projName);
+	}
+
+	public void showSubmissions(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	public String showStudents(String disName) throws NoSuchDisciplineIdException {
+		return ((Teacher)_user).showStudents(disName);
+	}
+
+	// Portal Estudante
+
+	public void submitProject(String disName, String projName, String submission) {
+		// TODO Entrega final
+	}
+
+	public void fillSurvey(String disName, String projName, int time, String comment) {
+		// TODO Entrega final
+	}
+
+	public void showSurveyResults(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	// Portal Delegado
+
+	public void createSurvey(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	public void cancelSurvey(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	public void openSurvey(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	public void closeSurvey(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	public void finalizeSurvey(String disName, String projName) {
+		// TODO Entrega final
+	}
+
+	public void showSurveyResults(String disName) {
+		// TODO Entrega final
+	}
 }
