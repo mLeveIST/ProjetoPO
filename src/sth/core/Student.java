@@ -63,9 +63,9 @@ public class Student extends Person implements java.io.Serializable {
     @Override
     public String toString() {
 
-        String info = _representative ? "DELEGADO|" + super.toString() + "\n" : "ALUNO|" + super.toString() + "\n";
+        String info = _representative ? "DELEGADO" + super.toString() : "ALUNO" + super.toString() ;
         Collections.sort(_disciplines);
-
+        System.out.println("hhehehe "+ _disciplines.get(1).getName());
         for(Discipline d : _disciplines)
             info += "* " + _course.getName() + " - " + d.getName() + "\n";
 

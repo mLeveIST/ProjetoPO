@@ -84,7 +84,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
         int equal = d.getCourse().compareTo(_course);
 
         if(equal == 0)
-            return d.getName().compareTo(_name);
+            return _name.compareTo(d.getName());
         return equal;
     }
 
