@@ -1,5 +1,5 @@
 package sth.core;
 
-public class Survey {
+public class Survey implements java.io.Serializable {
 	
 }
