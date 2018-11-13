@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.Input;
+import sth.app.person.DoLogin;
+import sth.core.School;
 import sth.core.SchoolManager;
 
 //FIXME import other classes if needed
@@ -29,15 +31,16 @@ public class DoSave extends Command<SchoolManager> {
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
+
     if(_fileName.value() == null)
-        _form.parse();
+      _form.parse();
 
     try (ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(_fileName.value()))) {
       objOut.writeObject(_receiver.saveState());
     } catch (FileNotFoundException fnfe) {
       _display.popup(Message.fileNotFound());
     } catch (IOException e) {
-      e.printStackTrace();
+        e.printStackTrace();
     }
   }
 }
