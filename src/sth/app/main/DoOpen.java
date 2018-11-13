@@ -3,10 +3,12 @@ package sth.app.main;
 import java.io.*;
 
 import pt.tecnico.po.ui.Command;
+import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
 import sth.core.SchoolManager;
 
-//FIXME import other classes if needed
+import sth.app.exception.NoSuchPersonException;
+import sth.core.exception.NoSuchPersonIdException;
 
 /**
  * 4.1.1. Open existing document.
@@ -25,28 +27,17 @@ public class DoOpen extends Command<SchoolManager> {
 
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
-  public final void execute() {
-      ObjectInputStream objIn = null;
-      _form.parse();
-    try {
+  public final void execute() throws DialogException {
+    _form.parse();
 
-      FileInputStream fpIn = new FileInputStream(_fileName.value());
-      objIn = new ObjectInputStream(fpIn);
-      Object anObject = objIn.readObject();
-      _receiver.openFile(anObject);
-
-      // Colocar LogIn --
+    try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(_fileName.value()))) {
+      _receiver.openState(objIn.readObject());
     } catch (FileNotFoundException fnfe) {
       _display.popup(Message.fileNotFound());
     } catch (ClassNotFoundException | IOException e) {
       e.printStackTrace();
-    } finally {
-        try {
-            if(objIn != null)
-                objIn.close();
-        } catch(IOException x){
-            x.printStackTrace();
-        }
+    } catch (NoSuchPersonIdException nsp) {
+      throw new NoSuchPersonException(nsp.getId());
     }
   }
 
