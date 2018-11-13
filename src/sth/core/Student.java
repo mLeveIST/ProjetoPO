@@ -2,37 +2,44 @@ package sth.core;
 
 import sth.core.exception.BadEntryException;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class Student extends Person {
     private static final int MAX_NUM_DISCIPLINES = 6;
 
-    private Discipline[] _disciplines;
+    private List<Discipline> _disciplines;
     private int _numDisciplines;
     private Course _course;
     private boolean _representative;
 
-    public Student(int id, int numTel, String name, boolean representative){
-        super(id, numTel, name);
+    public Student(int id, int phoneNum, String name, boolean representative){
+        super(id, phoneNum, name);
 
-        _disciplines = new Discipline[MAX_NUM_DISCIPLINES];
+        _disciplines = new ArrayList<>();
         _numDisciplines = 0;
         _representative = representative;
-
+        _course = null;
     }
 
     @Override
-    void addContext(Course course, Discipline discipline) {
-        _course = course;
-        for(Discipline disc : _disciplines){
-            if (_disciplines.equals(discipline) |_numDisciplines == 6)
-                System.out.println("Erro"); //Retornar False =??
+    void parseContext(String context, School school) throws BadEntryException {
+        String components[] =  context.split("\\|");
+
+        if (components.length != 2)
+            throw new BadEntryException("Invalid line context " + context);
+
+        if(_course == null){
+            _course = school.parseCourse(components[0]);
+            _course.addStudent(this);
         }
 
-        _disciplines[_numDisciplines] = discipline;
-        _numDisciplines++;
+        Discipline dis = _course.parseDiscipline(components[1]);
+        dis.enrollStudent(this);
+        _disciplines.add(dis);
+
     }
 
     void makeStudent(){
@@ -54,21 +61,11 @@ public class Student extends Person {
     @Override
     public String toString() {
 
-        String info = _representative ? "DELEGADO|" + getId() + "|" + getPhoneNum() + "|" + getName() + "\n" : super.toString();
-        Arrays.sort(_disciplines, new Comparator<Discipline>(){
-            public int compare(Discipline d1, Discipline d2){
-                if (d1 == null && d1 == null)
-                    return 0;
-                else if (d1 == null)
-                    return -1;
-                else if (d2 == null)
-                    return 1;
-                return  d1.compareTo(d2);
-            }
-        });
+        String info = _representative ? "DELEGADO|" + super.toString() + "\n" : "ALUNO|" + super.toString() + "\n";
+        Collections.sort(_disciplines);
 
-        for(int i=0; i < _numDisciplines ; i++)
-            info += "* " + _course.getName() + " - " + _disciplines[i].getName() + "\n";
+        for(Discipline d : _disciplines)
+            info += "* " + _course.getName() + " - " + d.getName() + "\n";
 
         return info;
     }
