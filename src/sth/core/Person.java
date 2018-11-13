@@ -2,6 +2,8 @@ package sth.core;
 
 import java.util.Comparator;
 
+import sth.core.exception.BadEntryException;
+
 public abstract class Person implements Comparable<Person> {
 
 	private int _id;
@@ -9,7 +11,7 @@ public abstract class Person implements Comparable<Person> {
 	private String _name;
 
 	// Might turn to method or declare instead at Collection.sort call outside Person
-	private Comparator<Person> _compByName = new Comparator<Person>() {
+	private static Comparator<Person> _compByName = new Comparator<Person>() {
 
 		@Override
 		public int compare(Person p1, Person p2) {
@@ -35,15 +37,24 @@ public abstract class Person implements Comparable<Person> {
 		return _phoneNum;
 	}
 
-	Comparator<Person> getComparatorByName() {
+	static Comparator<Person> getComparatorByName() {
 		return _compByName;
 	}
 
-	void setPhoneNum(int newPhoneNum) {
+	void setPhoneNumber(int newPhoneNum) {
 		_phoneNum = newPhoneNum;
 	}
 
-	abstract void addContext(Course course, Discipline discipline);
+	void parseContext(String context, School school) throws BadEntryException {
+		throw new BadEntryException("Should not have extra context: " + context);
+	}
+
+	// ----- UPDATE METHOD IN STUDENT TO ABOVE ------
+	//!_!_!_!_!_!_!_!_!_!_!_!_!_!//
+	void addContext(Course c, Discipline d) throws BadEntryException {
+		throw new BadEntryException("Should not have extra context");
+	}
+	//!_!_!_!_!_!_!_!_!_!_!_!_!_!//
 
 	@Override
 	public int compareTo(Person p) {
