@@ -15,6 +15,7 @@ import sth.core.SchoolManager;
  * 4.1.1. Save to file under current name (if unnamed, query for name).
  */
 public class DoSave extends Command<SchoolManager> {
+
   Input<String> _fileName = null;
 
   /**
@@ -22,32 +23,21 @@ public class DoSave extends Command<SchoolManager> {
    */
   public DoSave(SchoolManager receiver) {
     super(Label.SAVE, receiver);
-    _fileName = _form.addStringInput(Message.saveAs());
+    _fileName = _form.addStringInput(Message.newSaveAs());
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    ObjectOutputStream objOut = null;
     if(_fileName.value() == null)
         _form.parse();
 
-    try {
-      FileOutputStream fpout = new FileOutputStream(_fileName.value());
-      objOut = new ObjectOutputStream(fpout);
-      objOut.writeObject(_receiver.saveFile());
-
+    try (ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(_fileName.value()))) {
+      objOut.writeObject(_receiver.saveState());
     } catch (FileNotFoundException fnfe) {
       _display.popup(Message.fileNotFound());
     } catch (IOException e) {
       e.printStackTrace();
-    } finally {
-      try {
-        if (objOut != null)
-          objOut.close();
-      } catch(IOException x){
-        x.printStackTrace();
-      }
     }
   }
 }
