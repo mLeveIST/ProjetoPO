@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Course implements Comparable<Course> {
+public class Course implements Comparable<Course> , java.io.Serializable{
 
     private static final int MAX_REPRESENTATIVES = 7;
     private static int _numRepresentatives;
@@ -35,10 +35,10 @@ public class Course implements Comparable<Course> {
     }
 
     void addStudent(Student student) {
-        if (!student.isRepresentative())
+        if (!student.isRepresentative() && !_students.contains(student))
             _students.add(student);
 
-        else if (_numRepresentatives != MAX_REPRESENTATIVES) {
+        else if (_numRepresentatives != MAX_REPRESENTATIVES && !_students.contains(student)) {
             _numRepresentatives++;
             _students.add(student);
         } else
