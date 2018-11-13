@@ -1,8 +1,9 @@
 package sth.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import sth.core.exception.NoSuchProjectIdException;
+
+
+import java.util.*;
 
 public class Discipline implements  Comparable<Discipline>{
 
@@ -10,22 +11,19 @@ public class Discipline implements  Comparable<Discipline>{
     private Course _course;
     private String _name;
 
-    private boolean _sortedStudents;
-
-    private List<Student> _students;
-    private List<Teacher> _teachers;
-    private List<Project> _projects;
+    private Set<Student> _students;
+    private Set<Teacher> _teachers;
+    private Map<String,Project> _projects;
 
     private Notification _notifications;
 
     Discipline(String name, Course course){
         _name = name;
         _course = course;
-        _sortedStudents = false;
 
-        _students = new ArrayList<>();
-        _teachers = new ArrayList<>();
-        _projects = new ArrayList<>();
+        _students = new HashSet<>();
+        _teachers = new TreeSet<>();
+        _projects = new HashMap<>();
         _notifications = new Notification();
 
     }
@@ -35,6 +33,7 @@ public class Discipline implements  Comparable<Discipline>{
             System.out.println("Nao é suposto");
         else
             _students.add(student);
+
     }
 
     void addTeacher(Teacher teacher){
@@ -42,6 +41,18 @@ public class Discipline implements  Comparable<Discipline>{
             System.out.println("Não é suposto");
         else
             _teachers.add(teacher);
+    }
+
+    void createProject(String projName) throws NoSuchProjectIdException {
+        if(_projects.containsKey(projName))
+            throw new NoSuchProjectIdException(projName);
+        _projects.put(projName,new Project(projName));
+    }
+
+    Project getProject(String projName) throws NoSuchProjectIdException{
+        if(_projects.containsKey(projName))
+            throw new NoSuchProjectIdException(projName);
+        return _projects.get(projName);
     }
 
     String getName(){
@@ -54,12 +65,6 @@ public class Discipline implements  Comparable<Discipline>{
 
     public String showStudents() {
         String info = "";
-
-        if (!_sortedStudents) {
-            Collections.sort(_students);
-            _sortedStudents = true;
-        }
-
         for (Student a : _students)
             info += a.toString();
 
