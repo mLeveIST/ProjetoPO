@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Course implements Comparable<Course> {
 
-    private static final int Max_Representatives = 7;
+    private static final int MAX_REPRESENTATIVES = 7;
     private static int _numRepresentatives;
 
     private String _name;
@@ -36,7 +36,7 @@ public class Course implements Comparable<Course> {
         if (!student.isRepresentative())
             _students.add(student);
 
-        else if (_numRepresentatives != Max_Representatives) {
+        else if (_numRepresentatives != MAX_REPRESENTATIVES) {
             _numRepresentatives++;
             _students.add(student);
         } else
