@@ -1,7 +1,9 @@
 package sth.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Course implements Comparable<Course> {
 
@@ -10,14 +12,14 @@ public class Course implements Comparable<Course> {
 
     private String _name;
     private List<Discipline> _disciplines;
-    private List<Student> _students;
+    private Set<Student> _students;
 
     public String getName(){
         return _name;
     }
     public Course(String name){
         _disciplines = new ArrayList<>();
-        _students = new ArrayList<>();
+        _students = new HashSet<>();
         _name = name;
     }
 
