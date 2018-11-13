@@ -50,7 +50,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
     }
 
     Project getProject(String projName) throws NoSuchProjectIdException{
-        if(_projects.containsKey(projName))
+        if(_projects.containsKey(projName) == false)
             throw new NoSuchProjectIdException(projName);
         return _projects.get(projName);
     }
@@ -81,7 +81,11 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
     @Override
     public int compareTo(Discipline d) {
-        return _name.compareTo(d.getName());
+        int equal = d.getCourse().compareTo(_course);
+
+        if(equal == 0)
+            return d.getName().compareTo(_name);
+        return equal;
     }
 
 
