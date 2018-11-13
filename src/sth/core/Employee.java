@@ -5,15 +5,10 @@ import java.util.ArrayList;
 
 public class Employee extends Person {
 
-	private List<Course> _courses;
+	//private List<Course> _courses;
 
 	Employee(int id, int phoneNum, String name) {
 		super(id, phoneNum, name);
-		_courses = new ArrayList<>();
-	}
-	
-	@Override
-	void addContext(Course course, Discipline discipline) {
-		_courses.add(course);
+		//_courses = new ArrayList<>();
 	}
 }
