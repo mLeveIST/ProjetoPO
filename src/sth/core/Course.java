@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Course implements Comparable<Course> , java.io.Serializable{
+public class Course implements Comparable<Course> , java.io.Serializable {
 
     private static final int MAX_REPRESENTATIVES = 7;
     private static int _numRepresentatives;
@@ -15,25 +15,26 @@ public class Course implements Comparable<Course> , java.io.Serializable{
     private Map<String, Discipline> _disciplines;
     private Set<Student> _students;
 
-    public String getName(){
+    public String getName() {
         return _name;
     }
-    public Course(String name){
+
+    public Course(String name) {
         _disciplines = new HashMap<>();
         _students = new HashSet<>();
         _name = name;
     }
 
-    Discipline parseDiscipline(String name){
+    Discipline parseDiscipline(String name) {
         addDiscipline(name);
         return _disciplines.get(name);
     }
 
-    boolean addDiscipline(String name){
-        Discipline discipline = new Discipline(name,this);
+    boolean addDiscipline(String name) {
         if(_disciplines.containsKey(name))
             return false;
 
+        Discipline discipline = new Discipline(name,this);
         _disciplines.put(name,discipline );
         return true;
     }
@@ -48,7 +49,7 @@ public class Course implements Comparable<Course> , java.io.Serializable{
         return false;
     }
 
-    boolean addNumRepresentatives(){
+    boolean addNumRepresentatives() {
         if(_numRepresentatives == MAX_REPRESENTATIVES)
             return false;
 
@@ -56,11 +57,11 @@ public class Course implements Comparable<Course> , java.io.Serializable{
         return true;
     }
 
-    void subNumRepresentatives(){
+    void subNumRepresentatives() {
         _numRepresentatives--;
     }
 
-    int getNumRepresentatives(){
+    int getNumRepresentatives() {
         return _numRepresentatives;
     }
 
