@@ -25,34 +25,31 @@ public class Course implements Comparable<Course> , java.io.Serializable{
 
     Discipline parseDiscipline(String name){
         Discipline discipline = new Discipline(name,this);
-        if (_disciplines.contains(discipline) == false){
+
+        if (!_disciplines.contains(discipline)){
             _disciplines.add(discipline);
             return discipline;
         }
-        else {
-            return _disciplines.get(_disciplines.indexOf(discipline));
-        }
 
+        return _disciplines.get(_disciplines.indexOf(discipline));
     }
 
-    void addStudent(Student student) {
-        if (!student.isRepresentative() && !_students.contains(student))
-            _students.add(student);
+    boolean addStudent(Student student) {
+        if (!student.isRepresentative())
+            return _students.add(student);
 
-        else if (_numRepresentatives != MAX_REPRESENTATIVES && !_students.contains(student)) {
-            _numRepresentatives++;
-            _students.add(student);
-        } else
-            System.out.println(("Error: Add Student"));
+        else if (addNumRepresentatives())
+            return _students.add(student);
 
+        return false;
     }
 
-    boolean hasStudent(Student student){
-        return _students.contains(student);
-    }
+    boolean addNumRepresentatives(){
+        if(_numRepresentatives == MAX_REPRESENTATIVES)
+            return false;
 
-    void addNumRepresentatives(){
         _numRepresentatives++;
+        return true;
     }
 
     void subNumRepresentatives(){
@@ -65,12 +62,13 @@ public class Course implements Comparable<Course> , java.io.Serializable{
 
     Discipline getDiscipline(String name){
         Discipline discipline = new Discipline(name, this);
-        if(_disciplines.contains(discipline) == false)
+
+        if(!_disciplines.contains(discipline))
             return null;
+
         else
             return _disciplines.get(_disciplines.indexOf(discipline));
     }
-
 
     @Override
     public boolean equals(Object obj) {
