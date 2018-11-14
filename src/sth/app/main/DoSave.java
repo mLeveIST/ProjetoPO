@@ -7,11 +7,8 @@ import java.io.ObjectOutputStream;
 
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.Input;
-import sth.app.person.DoLogin;
-import sth.core.School;
 import sth.core.SchoolManager;
 
-//FIXME import other classes if needed
 
 /**
  * 4.1.1. Save to file under current name (if unnamed, query for name).
