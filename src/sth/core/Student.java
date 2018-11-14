@@ -2,16 +2,15 @@ package sth.core;
 
 import sth.core.exception.BadEntryException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 
 public class Student extends Person implements java.io.Serializable {
 
     private static final int MAX_NUM_DISCIPLINES = 6;
 
-    private List<Discipline> _disciplines;
+    private Set<Discipline> _disciplines;
     private int _numDisciplines;
     private Course _course;
     private boolean _representative;
@@ -20,7 +19,7 @@ public class Student extends Person implements java.io.Serializable {
     public Student(int id, int phoneNum, String name, boolean representative){
         super(id, phoneNum, name);
 
-        _disciplines = new ArrayList<>();
+        _disciplines = new TreeSet<>();
         _numDisciplines = 0;
         _representative = representative;
         _course = null;
@@ -40,21 +39,39 @@ public class Student extends Person implements java.io.Serializable {
 
         Discipline dis = _course.parseDiscipline(components[1]);
         dis.enrollStudent(this);
-        _disciplines.add(dis);
 
+        addDiscipline(dis);
     }
 
-    void makeStudent(){
+    boolean addDiscipline(Discipline dis){
+        if(_disciplines.size() == MAX_NUM_DISCIPLINES || _disciplines.contains(dis))
+            return false;
+
+        _numDisciplines++;
+        return _disciplines.add(dis);
+    }
+
+    boolean makeStudent(){
+        if(!isRepresentative())
+            return false;
+
+        _course.subNumRepresentatives();
         _representative = false;
+
+        return true;
     }
 
-    void makeRepresentaive(){
-        _representative = true;
+    boolean makeRepresentaive(){
+        if(isRepresentative() && _course.addNumRepresentatives())
+            return false;
+
+        return true;
     }
 
     boolean isRepresentative(){
         return _representative;
     }
+
     @Override
     public boolean equals(Object obj){
         return obj!=null && obj instanceof Student && ((Student)obj).getId() == getId();
@@ -62,9 +79,7 @@ public class Student extends Person implements java.io.Serializable {
 
     @Override
     public String toString() {
-
         String info = _representative ? "DELEGADO" + super.toString() : "ALUNO" + super.toString() ;
-        Collections.sort(_disciplines);
 
         for(Discipline d : _disciplines)
             info += "* " + _course.getName() + " - " + d.getName() + "\n";
