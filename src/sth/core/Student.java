@@ -47,6 +47,7 @@ public class Student extends Person implements java.io.Serializable {
         if(_course != null) {
             return false;
         }
+        _course = course;
         return true;
     }
 
