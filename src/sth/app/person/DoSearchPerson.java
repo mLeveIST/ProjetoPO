@@ -18,7 +18,7 @@ public class DoSearchPerson extends Command<SchoolManager> {
    */
   public DoSearchPerson(SchoolManager receiver) {
     super(Label.SEARCH_PERSON, receiver);
-    //FIXME initialize input fields if needed
+    _input = _form.addStringInput(Message.requestPersonName());
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */
