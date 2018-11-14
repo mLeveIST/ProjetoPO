@@ -29,8 +29,9 @@ public class Course implements Comparable<Course> , java.io.Serializable{
             _disciplines.add(discipline);
             return discipline;
         }
-        else
+        else {
             return _disciplines.get(_disciplines.indexOf(discipline));
+        }
 
     }
 
@@ -75,7 +76,7 @@ public class Course implements Comparable<Course> , java.io.Serializable{
     public boolean equals(Object obj) {
         return obj != null &&
                 obj instanceof Course &&
-                _name == ((Course) obj).getName();
+                _name.compareTo(((Course) obj).getName()) == 0;
     }
 
     @Override
