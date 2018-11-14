@@ -33,7 +33,7 @@ public class Student extends Person implements java.io.Serializable {
             throw new BadEntryException("Invalid line context " + context);
 
         if(_course == null){
-            _course = school.parseCourse(components[0]);
+            addCourse(school.parseCourse(components[0]));
             _course.addStudent(this);
         }
 
@@ -41,6 +41,13 @@ public class Student extends Person implements java.io.Serializable {
         dis.enrollStudent(this);
 
         addDiscipline(dis);
+    }
+
+    boolean addCourse(Course course){
+        if(_course != null) {
+            return false;
+        }
+        return true;
     }
 
     boolean addDiscipline(Discipline dis){
