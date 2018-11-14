@@ -25,37 +25,30 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
         _teachers = new TreeSet<>();
         _projects = new HashMap<>();
         _notifications = new Notification();
-
     }
 
-    void enrollStudent(Student student){
-        if(_students.contains(student) == true || _students.size() > MAX_STUDENTS_DISCIPLINE)
-            System.out.println("Nao é suposto");
-        else{
-            _students.add(student);
-        }
+    boolean enrollStudent(Student student){
+        if(_students.size() > MAX_STUDENTS_DISCIPLINE)
+            return false;
 
-
-
-
+        return _students.add(student);
     }
 
-    void addTeacher(Teacher teacher){
-        if(_teachers.contains(teacher) == true)
-            System.out.println("Não é suposto");
-        else
-            _teachers.add(teacher);
+    boolean addTeacher(Teacher teacher){
+        return _teachers.add(teacher);
     }
 
     void createProject(String projName) throws NoSuchProjectIdException {
         if(_projects.containsKey(projName))
             throw new NoSuchProjectIdException(projName);
+
         _projects.put(projName,new Project(projName));
     }
 
     Project getProject(String projName) throws NoSuchProjectIdException{
         if(_projects.containsKey(projName) == false)
             throw new NoSuchProjectIdException(projName);
+
         return _projects.get(projName);
     }
 
@@ -90,6 +83,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
         if(equal == 0)
             return _name.compareTo(d.getName());
+
         return equal;
     }
 
