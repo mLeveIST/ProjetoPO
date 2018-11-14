@@ -31,8 +31,12 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
     void enrollStudent(Student student){
         if(_students.contains(student) == true || _students.size() > MAX_STUDENTS_DISCIPLINE)
             System.out.println("Nao é suposto");
-        else
+        else{
             _students.add(student);
+        }
+
+
+
 
     }
 
@@ -76,7 +80,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
     public boolean equals(Object obj) {
         return obj != null &&
                 obj instanceof Discipline &&
-                _name == ((Discipline) obj).getName() &&
+                _name.compareTo(((Discipline)obj).getName()) == 0 &&
                 _course.equals(((Discipline) obj).getCourse());
     }
 
