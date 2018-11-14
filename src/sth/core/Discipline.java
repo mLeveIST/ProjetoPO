@@ -5,7 +5,7 @@ import sth.core.exception.NoSuchProjectIdException;
 
 import java.util.*;
 
-public class Discipline implements  Comparable<Discipline>, java.io.Serializable{
+public class Discipline implements  Comparable<Discipline>, java.io.Serializable {
 
     private static final int MAX_STUDENTS_DISCIPLINE = 200;
     private Course _course;
@@ -17,7 +17,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
     private Notification _notifications;
 
-    Discipline(String name, Course course){
+    Discipline(String name, Course course) {
         _name = name;
         _course = course;
 
@@ -27,14 +27,14 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
         _notifications = new Notification();
     }
 
-    boolean enrollStudent(Student student){
+    boolean enrollStudent(Student student) {
         if(_students.size() > MAX_STUDENTS_DISCIPLINE)
             return false;
 
         return _students.add(student);
     }
 
-    boolean addTeacher(Teacher teacher){
+    boolean addTeacher(Teacher teacher) {
         return _teachers.add(teacher);
     }
 
@@ -45,18 +45,18 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
         _projects.put(projName,new Project(projName));
     }
 
-    Project getProject(String projName) throws NoSuchProjectIdException{
+    Project getProject(String projName) throws NoSuchProjectIdException {
         if(_projects.containsKey(projName) == false)
             throw new NoSuchProjectIdException(projName);
 
         return _projects.get(projName);
     }
 
-    String getName(){
+    String getName() {
         return _name;
     }
 
-    Course getCourse(){
+    Course getCourse() {
         return _course;
     }
 
