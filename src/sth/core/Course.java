@@ -2,7 +2,8 @@ package sth.core;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 
 public class Course implements Comparable<Course> , java.io.Serializable{
@@ -11,27 +12,30 @@ public class Course implements Comparable<Course> , java.io.Serializable{
     private static int _numRepresentatives;
 
     private String _name;
-    private List<Discipline> _disciplines;
+    private Map<String, Discipline> _disciplines;
     private Set<Student> _students;
 
     public String getName(){
         return _name;
     }
     public Course(String name){
-        _disciplines = new ArrayList<>();
+        _disciplines = new HashMap<>();
         _students = new HashSet<>();
         _name = name;
     }
 
     Discipline parseDiscipline(String name){
+        addDiscipline(name);
+        return _disciplines.get(name);
+    }
+
+    boolean addDiscipline(String name){
         Discipline discipline = new Discipline(name,this);
+        if(_disciplines.containsKey(name))
+            return false;
 
-        if (!_disciplines.contains(discipline)){
-            _disciplines.add(discipline);
-            return discipline;
-        }
-
-        return _disciplines.get(_disciplines.indexOf(discipline));
+        _disciplines.put(name,discipline );
+        return true;
     }
 
     boolean addStudent(Student student) {
@@ -58,16 +62,6 @@ public class Course implements Comparable<Course> , java.io.Serializable{
 
     int getNumRepresentatives(){
         return _numRepresentatives;
-    }
-
-    Discipline getDiscipline(String name){
-        Discipline discipline = new Discipline(name, this);
-
-        if(!_disciplines.contains(discipline))
-            return null;
-
-        else
-            return _disciplines.get(_disciplines.indexOf(discipline));
     }
 
     @Override
