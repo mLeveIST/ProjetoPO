@@ -16,7 +16,7 @@ public class Student extends Person implements java.io.Serializable {
     private boolean _representative;
 
 
-    public Student(int id, int phoneNum, String name, boolean representative){
+    public Student(int id, int phoneNum, String name, boolean representative) {
         super(id, phoneNum, name);
 
         _disciplines = new TreeSet<>();
@@ -43,16 +43,16 @@ public class Student extends Person implements java.io.Serializable {
         addDiscipline(dis);
     }
 
-    boolean addCourse(Course course){
+    boolean addCourse(Course course) {
         if(_course != null) {
             return false;
         }
-        
+
         _course = course;
         return true;
     }
 
-    boolean addDiscipline(Discipline dis){
+    boolean addDiscipline(Discipline dis) {
         if(_disciplines.size() == MAX_NUM_DISCIPLINES || _disciplines.contains(dis))
             return false;
 
@@ -60,7 +60,7 @@ public class Student extends Person implements java.io.Serializable {
         return _disciplines.add(dis);
     }
 
-    boolean makeStudent(){
+    boolean makeStudent() {
         if(!isRepresentative())
             return false;
 
@@ -70,19 +70,19 @@ public class Student extends Person implements java.io.Serializable {
         return true;
     }
 
-    boolean makeRepresentaive(){
+    boolean makeRepresentaive() {
         if(isRepresentative() && _course.addNumRepresentatives())
             return false;
 
         return true;
     }
 
-    boolean isRepresentative(){
+    boolean isRepresentative() {
         return _representative;
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         return obj!=null && obj instanceof Student && ((Student)obj).getId() == getId();
     }
 
