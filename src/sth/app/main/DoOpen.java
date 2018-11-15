@@ -29,6 +29,7 @@ public class DoOpen extends Command<SchoolManager> {
   @Override
   public final void execute() throws DialogException {
     _form.parse();
+    _receiver.setFileName(_fileName.value());
 
     try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(_fileName.value()))) {
       _receiver.openState(objIn.readObject());
