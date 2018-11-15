@@ -31,7 +31,6 @@ public class SchoolManager {
 		}
 	}
 
-
 	public void login(int id) throws NoSuchPersonIdException {
 		_user = _school.getPerson(id);
 	}
@@ -53,7 +52,13 @@ public class SchoolManager {
 	}
 
 	// Portal Principal
+	public String getFileName() {
+		return _fileName;
+	}
 
+	public void setFileName(String fileName) {
+		_fileName = fileName;
+	}
 
 	public void openState(Object obj) throws NoSuchPersonIdException {
 		School newSchool = (School) obj;
