@@ -12,6 +12,7 @@ import sth.core.exception.NoSuchProjectIdException;
 public class SchoolManager {
 
 	School _school;
+	private String _fileName;
 	private Person _user;
 
 	public SchoolManager() {
@@ -53,9 +54,10 @@ public class SchoolManager {
 
 	// Portal Principal
 
+
 	public void openState(Object obj) throws NoSuchPersonIdException {
 		School newSchool = (School) obj;
-		newSchool.getPerson(_user.getId());
+		_user = newSchool.getPerson(_user.getId());
 		_school = newSchool;
 
 	}
