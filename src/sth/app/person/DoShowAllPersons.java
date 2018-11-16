@@ -3,12 +3,10 @@ package sth.app.person;
 import pt.tecnico.po.ui.Command;
 import sth.core.SchoolManager;
 
-
 /**
  * 4.2.3. Show all persons.
  */
 public class DoShowAllPersons extends Command<SchoolManager> {
-
 
   /**
    * @param receiver

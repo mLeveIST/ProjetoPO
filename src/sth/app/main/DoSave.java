@@ -30,7 +30,7 @@ public class DoSave extends Command<SchoolManager> {
   public final void execute() {
     String fileName;
 
-    if((fileName = _receiver.getFileName()) == null){
+    if ((fileName = _receiver.getFileName()) == null) {
       _form.parse();
       fileName = _fileName.value();
       _receiver.setFileName(fileName);

@@ -1,11 +1,18 @@
 package sth.core;
 
+import sth.core.exception.DuplicateProjectIdException;
 import sth.core.exception.NoSuchProjectIdException;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
-import java.util.*;
+public class Discipline implements Comparable<Discipline>, java.io.Serializable {
 
-public class Discipline implements  Comparable<Discipline>, java.io.Serializable {
+    /** Serial number for serialization */
+    private static final long serialVersionUID = 201811152205L;
 
     private static final int MAX_STUDENTS_DISCIPLINE = 200;
     private Course _course;
@@ -13,9 +20,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
     private Set<Student> _students;
     private Set<Teacher> _teachers;
-    private Map<String,Project> _projects;
-
-    private Notification _notifications;
+    private Map<String, Project> _projects;
 
     Discipline(String name, Course course) {
         _name = name;
@@ -24,11 +29,10 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
         _students = new HashSet<>();
         _teachers = new TreeSet<>();
         _projects = new HashMap<>();
-        _notifications = new Notification();
     }
 
     boolean enrollStudent(Student student) {
-        if(_students.size() > MAX_STUDENTS_DISCIPLINE)
+        if (_students.size() > MAX_STUDENTS_DISCIPLINE)
             return false;
 
         return _students.add(student);
@@ -38,9 +42,9 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
         return _teachers.add(teacher);
     }
 
-    void createProject(String projName) throws NoSuchProjectIdException {
+    void createProject(String projName) throws DuplicateProjectIdException {
         if(_projects.containsKey(projName))
-            throw new NoSuchProjectIdException(projName);
+            throw new DuplicateProjectIdException(_name, projName);
 
         _projects.put(projName,new Project(projName));
     }
@@ -62,6 +66,7 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
 
     public String showStudents() {
         String info = "";
+
         for (Student a : _students) {
             info += a.toString();
         }
@@ -72,19 +77,16 @@ public class Discipline implements  Comparable<Discipline>, java.io.Serializable
     @Override
     public boolean equals(Object obj) {
         return obj != null &&
-                obj instanceof Discipline &&
-                _name.compareTo(((Discipline)obj).getName()) == 0 &&
-                _course.equals(((Discipline) obj).getCourse());
+               obj instanceof Discipline &&
+               ((Discipline) obj)._name.equals(_name) &&
+               ((Discipline) obj)._course.equals(_course);
     }
 
     @Override
     public int compareTo(Discipline d) {
-        int equal = _course.compareTo(d.getCourse());
+        int equal = _course.compareTo(d._course);
 
-        if(equal == 0)
-            return _name.compareTo(d.getName());
-
-        return equal;
+        return equal == 0 ? _name.compareTo(d._name) : equal;
     }
 
 

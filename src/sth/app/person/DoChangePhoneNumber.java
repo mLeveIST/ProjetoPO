@@ -4,8 +4,6 @@ import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.Input;
 import sth.core.SchoolManager;
 
-
-
 /**
  * 4.2.2. Change phone number.
  */

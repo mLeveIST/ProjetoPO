@@ -19,13 +19,11 @@ public class App {
   public static void main(String[] args) {
     SchoolManager school = new SchoolManager();
 
-    String datafile = System.getProperty("import"); //$NON-NLS-1$
+    String datafile = System.getProperty("import");
     if (datafile != null) {
       try {
         school.importFile(datafile);
-      } catch (ImportFileException bde) { // !!!******* Tirei a BadEntryException e IOException por agora (leve) ******!!!
-        // file input should always be correct: just present the problem
-        // no behavior described: just present the problem
+      } catch (ImportFileException bde) {
         System.err.println("Error in parsing: " + bde.getMessage());
         bde.printStackTrace();
       }
@@ -37,7 +35,6 @@ public class App {
       Menu menu = new MainMenu(school);
       menu.open();
     } catch (DialogException de) {
-      // DO NOTHING -- just exit
       de.printStackTrace();
     } finally {
       IO.close();

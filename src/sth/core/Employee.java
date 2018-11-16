@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 public class Employee extends Person implements java.io.Serializable {
 
+	/** Serial number for serialization */
+    private static final long serialVersionUID = 201811152209L;
+
 	//private List<Course> _courses;
 
 	Employee(int id, int phoneNum, String name) {

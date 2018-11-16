@@ -4,7 +4,7 @@ import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
 import sth.core.SchoolManager;
 
-import sth.app.exception.DuplicateProjectException;
+import sth.core.exception.DuplicateProjectIdException;
 import sth.core.exception.NoSuchDisciplineIdException;
 import sth.core.exception.NoSuchProjectIdException;
 
@@ -22,12 +22,7 @@ public class DoCreateProject extends sth.app.common.ProjectCommand {
 
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
-  public final void myExecute() throws DialogException, NoSuchDisciplineIdException { //, NoSuchProjectIdException {
-    try {
-      _receiver.createProject(_discipline.value(), _project.value());
-    } catch (NoSuchProjectIdException nsp) {
-      throw new DuplicateProjectException(_discipline.value(), _project.value());
-    }
+  public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateProjectIdException {
+    _receiver.createProject(_discipline.value(), _project.value());
   }
-
 }

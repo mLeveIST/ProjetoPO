@@ -21,5 +21,4 @@ public interface Label {
 
   /** To use for loggin in. */
   String LOGIN = "Identificador: ";
-
 }

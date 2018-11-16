@@ -6,6 +6,9 @@ import sth.core.exception.BadEntryException;
 
 public abstract class Person implements Comparable<Person>, java.io.Serializable {
 
+	/** Serial number for serialization */
+    private static final long serialVersionUID = 201811152206L;
+
 	private int _id;
 	private int _phoneNum;
 	private String _name;

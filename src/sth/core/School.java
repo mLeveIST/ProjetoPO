@@ -12,9 +12,17 @@ import sth.core.exception.BadEntryException;
 import sth.core.exception.NoSuchPersonIdException;
 
 /**
- * 
+ * Class representing a school that serves as the starting point to populate the rest of the core dominion.<br>
+ * Its methods are used by the <code>SchoolManager</code> class to apply commands and by the <code>Parser</code> class
+ * to parse information from a file.<br>
+ * Objects of this class are also serialized to save the state of the core.
+ *
+ * @see SchoolManager
+ * @see Parser
+ *
  * @author Miguel Levezinho,  No 90756
  * @author Rafael Figueiredo, No 90770
+ * @version 1.0
  */
 public class School implements java.io.Serializable {
 	
@@ -25,23 +33,25 @@ public class School implements java.io.Serializable {
 	private String _name;
 
 	/** Stores a collection of courses that the school has */
-	private List<Course> _courses;
+	private Map<String, Course> _courses;
 
 	/** Stores all the people the related to the school by their IDs */
 	private Map<Integer, Person> _people;
 
 	/**
+	 * Constructor of <code>School</code> objects.
 	 *
 	 * @param name - Name of the school
 	 */
 	public School(String name) {
 		_name = name;
-		_courses = new ArrayList<>();
+		_courses = new HashMap<>();
 		_people = new HashMap<>();
 	}
 
 	/**
-	 * 
+	 * Gets the <code>Person</code> whose id is passed to the method.
+	 *
 	 * @param id - Person identifier number
 	 *
 	 * @return The <code>Person</code> whose ID is passed to the method
@@ -54,7 +64,9 @@ public class School implements java.io.Serializable {
 	}
 
 	/**
-	 * 
+	 * Shows all the people in the school by appending a String with all
+	 * the information of each person.
+	 *
 	 * @return Formatted information of all the people in the school
 	 */
 	String showAllPersons() {
@@ -70,7 +82,8 @@ public class School implements java.io.Serializable {
 	}
 
 	/**
-	 * 
+	 * Seraches for people that have the string <code>name</code> in their name.
+	 *
 	 * @param name - Name of the person to search for
 	 *
 	 * @return Formatted information about the person(s) after the serach
@@ -89,6 +102,7 @@ public class School implements java.io.Serializable {
 	}
 
 	/**
+	 * Creates a <code>Parser</code> instance to interpret the file passed to the method.
 	 *
 	 * @param fileName - Name of the file with information of the school dominion
 	 *
@@ -101,54 +115,44 @@ public class School implements java.io.Serializable {
 	}
 
 	/**
-	 * 
-	 * @param name - Name of the course to search for
+	 * Adds a Course to the school in the context of the parser.
+	 *
+	 * @param name - Name of the course to parse
 	 *
 	 * @return The <code>Course</code> whose name matches the one passed to the method
 	 */
 	Course parseCourse(String name) {
-		Course course;
-		
-		for (Course c : _courses)
-			if (c.getName().equals(name))
-				return c;
-
-		course = new Course(name);
-		_courses.add(course);
-		return course;
+		addCourse(name);
+		return _courses.get(name);
 	}
 
 	/**
-	 * 
-	 * @param type     - String type of the person to create (Must be ALUNO, DELEGADO, DOCENTE or FUNCIONÁRIO)
-	 * @param id       - ID to give the person to be created
-	 * @param phoneNum - Telephone number of the person to be created
-	 * @param name     - Name of the person being created
+	 * Adds a <code>Course</code> to the school.
 	 *
-	 * @return A new <code>Person</code> to be added to the school
-	 * @throws BadEntryException When the type of the person is not recognized
+	 * @param name - Name of the course to add to the school
+	 *
+	 * @return true if the a course was created and added, false if the course with name <code>name</code> already existed
 	 */
-	Person parsePerson(String type, int id, int phoneNum, String name) throws BadEntryException {
-		Person person;
+	boolean addCourse(String name) {
+        if (_courses.containsKey(name))
+        	return false;
 
-		switch (type) {
-			case "ALUNO":
-				person = new Student(id, phoneNum, name, false);
-				break;
-			case "DELEGADO":
-				person = new Student(id, phoneNum, name, true);
-				break;
-			case "DOCENTE":
-				person = new Teacher(id, phoneNum, name);
-				break;
-			case "FUNCIONÁRIO":
-				person = new Employee(id, phoneNum, name);
-				break;
-			default:
-				throw new BadEntryException("Invalid token " + type + "in line describing a person");
-		}
+        Course course = new Course(name);
+        _courses.put(name, course);
+        return true;
+    }
 
-		_people.put(id, person);
-		return person;
-	}	
+    /**
+     * Adds a <code>Person</code> to the school.
+	 * 
+	 * @param name - Name of the person to add to the school
+	 *
+	 * @return true if the person was successfuly added, false if it already exists in the school
+	 */
+	boolean addPerson(Person person) {
+		if (_people.containsValue(person))
+			return false;
+		_people.put(person.getId(), person);
+		return true;
+	}
 }

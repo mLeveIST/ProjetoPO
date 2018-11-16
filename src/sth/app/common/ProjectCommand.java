@@ -3,12 +3,15 @@ package sth.app.common;
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
+
 import sth.core.SchoolManager;
 
-import sth.app.exception.NoSuchProjectException;
+import sth.app.exception.DuplicateProjectException;
 import sth.app.exception.NoSuchDisciplineException;
-import sth.core.exception.NoSuchProjectIdException;
+import sth.app.exception.NoSuchProjectException;
+import sth.core.exception.DuplicateProjectIdException;
 import sth.core.exception.NoSuchDisciplineIdException;
+import sth.core.exception.NoSuchProjectIdException;
 
 /**
  * Represents the super class Command of all commands that concern a project.
@@ -38,12 +41,12 @@ public abstract class ProjectCommand extends Command<SchoolManager> {
    * This method represents the specific behavior of each command class
    * that concerns a project.
    **/
-  protected abstract void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, DialogException;
+  protected abstract void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, DuplicateProjectIdException, DialogException;
 
   /**
    * Executes the this command. Parses the form associated with this command and then executes the
    * specific behavior of this command (should be implemented in myExecute method).
-   * It handles the chProjectIdException and NoSuchDisciplineIdException.
+   * It handles the NoSuchProjectIdException and NoSuchDisciplineIdException and DuplicateProjectIdException.
    *
    * @see pt.tecnico.po.ui.Command#execute()
    **/
@@ -57,6 +60,8 @@ public abstract class ProjectCommand extends Command<SchoolManager> {
       throw new NoSuchProjectException(_discipline.value(), _project.value());
     } catch (NoSuchDisciplineIdException nsd) {
       throw new NoSuchDisciplineException(_discipline.value());
+    } catch (DuplicateProjectIdException dpi) {
+      throw new DuplicateProjectException(_discipline.value(), _project.value());
     }
   }
 

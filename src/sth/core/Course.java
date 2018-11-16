@@ -6,11 +6,14 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Course implements Comparable<Course> , java.io.Serializable {
+public class Course implements Comparable<Course>, java.io.Serializable {
+
+    /** Serial number for serialization */
+    private static final long serialVersionUID = 201811152204L;
 
     private static final int MAX_REPRESENTATIVES = 7;
-    private static int _numRepresentatives;
-
+    
+    private int _numRepresentatives;
     private String _name;
     private Map<String, Discipline> _disciplines;
     private Set<Student> _students;
@@ -31,11 +34,11 @@ public class Course implements Comparable<Course> , java.io.Serializable {
     }
 
     boolean addDiscipline(String name) {
-        if(_disciplines.containsKey(name))
+        if (_disciplines.containsKey(name))
             return false;
 
-        Discipline discipline = new Discipline(name,this);
-        _disciplines.put(name,discipline );
+        Discipline discipline = new Discipline(name, this);
+        _disciplines.put(name, discipline);
         return true;
     }
 
@@ -50,7 +53,7 @@ public class Course implements Comparable<Course> , java.io.Serializable {
     }
 
     boolean addNumRepresentatives() {
-        if(_numRepresentatives == MAX_REPRESENTATIVES)
+        if (_numRepresentatives == MAX_REPRESENTATIVES)
             return false;
 
         _numRepresentatives++;
@@ -68,13 +71,12 @@ public class Course implements Comparable<Course> , java.io.Serializable {
     @Override
     public boolean equals(Object obj) {
         return obj != null &&
-                obj instanceof Course &&
-                _name.compareTo(((Course) obj).getName()) == 0;
+               obj instanceof Course &&
+               ((Course) obj)._name.equals(_name);
     }
 
     @Override
     public int compareTo(Course c) {
-        return _name.compareTo(c.getName());
+        return _name.compareTo(c._name);
     }
-
 }

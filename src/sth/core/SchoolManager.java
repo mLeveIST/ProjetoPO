@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import sth.core.exception.BadEntryException;
+import sth.core.exception.DuplicateProjectIdException;
 import sth.core.exception.ImportFileException;
 import sth.core.exception.NoSuchDisciplineIdException;
 import sth.core.exception.NoSuchPersonIdException;
@@ -11,7 +12,7 @@ import sth.core.exception.NoSuchProjectIdException;
 
 public class SchoolManager {
 
-	School _school;
+	private School _school;
 	private String _fileName;
 	private Person _user;
 
@@ -51,7 +52,6 @@ public class SchoolManager {
 		return _user instanceof Student && ((Student) _user).isRepresentative();
 	}
 
-	// Portal Principal
 	public String getFileName() {
 		return _fileName;
 	}
@@ -64,14 +64,11 @@ public class SchoolManager {
 		School newSchool = (School) obj;
 		_user = newSchool.getPerson(_user.getId());
 		_school = newSchool;
-
 	}
 
 	public School saveState() {
 		return _school;
 	}
-
-	// Portal Pessoal
 
 	public String showPerson() {
 		return _user.toString();
@@ -89,14 +86,12 @@ public class SchoolManager {
 		_user.setPhoneNumber(phoneNum);
 	}
 
-	// Portal Docente
-
-	public void createProject(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
-		((Teacher)_user).createProject(disName, projName);
+	public void createProject(String disName, String projName) throws NoSuchDisciplineIdException, DuplicateProjectIdException {
+		((Teacher) _user).createProject(disName, projName);
 	}
 
 	public void closeProject(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
-		((Teacher)_user).closeProject(disName, projName);
+		((Teacher) _user).closeProject(disName, projName);
 	}
 
 	public void showSubmissions(String disName, String projName) {
@@ -104,10 +99,8 @@ public class SchoolManager {
 	}
 
 	public String showStudents(String disName) throws NoSuchDisciplineIdException {
-		return ((Teacher)_user).showStudents(disName);
+		return ((Teacher) _user).showStudents(disName);
 	}
-
-	// Portal Estudante
 
 	public void submitProject(String disName, String projName, String submission) {
 		// TODO Entrega final
@@ -120,8 +113,6 @@ public class SchoolManager {
 	public void showSurveyResults(String disName, String projName) {
 		// TODO Entrega final
 	}
-
-	// Portal Delegado
 
 	public void createSurvey(String disName, String projName) {
 		// TODO Entrega final

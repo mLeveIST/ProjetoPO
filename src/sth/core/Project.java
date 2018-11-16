@@ -7,6 +7,9 @@ import sth.core.exception.NoSuchProjectIdException;
 
 public class Project implements Comparable<Project>, java.io.Serializable {
 
+	/** Serial number for serialization */
+    private static final long serialVersionUID = 201811152210L;
+
 	private String _name;
 	private String _description;
 	private boolean _open;
@@ -14,7 +17,13 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	private Survey _survey;
 
 	Project(String name) {
+		this(name, "Descrição");
+		_open = true;
+	}
+
+	Project(String name, String description) {
 		_name = name;
+		_description = description;
 		_open = true;
 	}
 

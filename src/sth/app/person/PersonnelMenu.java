@@ -18,5 +18,4 @@ public class PersonnelMenu extends Menu {
         new DoSearchPerson(receiver), //4.2.4
     });
   }
-
 }
