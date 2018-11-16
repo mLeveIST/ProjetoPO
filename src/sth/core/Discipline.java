@@ -26,8 +26,8 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         _name = name;
         _course = course;
 
-        _students = new HashSet<>();
-        _teachers = new TreeSet<>();
+        _students = new TreeSet<>();
+        _teachers = new HashSet<>();
         _projects = new HashMap<>();
     }
 
@@ -64,11 +64,11 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         return _course;
     }
 
-    public String showStudents() {
+   	String showStudents() {
         String info = "";
 
-        for (Student a : _students) {
-            info += a.toString();
+        for (Student student : _students) {
+            info += student.toString();
         }
 
         return info;

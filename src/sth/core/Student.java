@@ -17,8 +17,7 @@ public class Student extends Person implements java.io.Serializable {
     private Course _course;
     private boolean _representative;
 
-
-    public Student(int id, int phoneNum, String name, boolean representative) {
+	Student(int id, int phoneNum, String name, boolean representative) {
         super(id, phoneNum, name);
 
         _disciplines = new TreeSet<>();

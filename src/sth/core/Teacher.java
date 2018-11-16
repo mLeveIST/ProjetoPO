@@ -16,13 +16,11 @@ public class Teacher extends Person implements java.io.Serializable {
 	/** Serial number for serialization */
     private static final long serialVersionUID = 201811152208L;
 
-	//private List<Course> _courses;  //Might be useless
 	private Map<String, Discipline> _disciplines;
 
 	Teacher(int id, int phoneNum, String name) {
 		super(id, phoneNum, name);
 
-		//_courses = new ArrayList<>();
 		_disciplines = new HashMap<>();
 	}
 
@@ -36,7 +34,6 @@ public class Teacher extends Person implements java.io.Serializable {
     	Course course = school.parseCourse(components[0]);
     	Discipline discipline = course.parseDiscipline(components[1]);
 
-    	//_courses.add(course);
     	addDiscipline(discipline);
 	}
 

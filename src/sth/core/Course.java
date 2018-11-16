@@ -1,6 +1,5 @@
 package sth.core;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
@@ -18,14 +17,14 @@ public class Course implements Comparable<Course>, java.io.Serializable {
     private Map<String, Discipline> _disciplines;
     private Set<Student> _students;
 
-    public String getName() {
-        return _name;
-    }
-
-    public Course(String name) {
+    Course(String name) {
         _disciplines = new HashMap<>();
         _students = new HashSet<>();
         _name = name;
+    }
+
+    String getName() {
+        return _name;
     }
 
     Discipline parseDiscipline(String name) {
