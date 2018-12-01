@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 
+import sth.core.exception.NoSuchDisciplineIdException;
+
 /**
  *
  * @author Miguel Levezinho,  No 90756
@@ -129,6 +131,7 @@ public class Course implements Comparable<Course>, java.io.Serializable {
      * @throws NoSuchDisciplineIdException When the passed discipline ID is not part of the course
      */
     Discipline getDiscipline(String disName) throws NoSuchDisciplineIdException {
+        return null;
         // *********************
         // ********TODO*********
         // *********************
