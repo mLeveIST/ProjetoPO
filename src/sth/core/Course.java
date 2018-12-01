@@ -5,18 +5,37 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ *
+ * @author Miguel Levezinho,  No 90756
+ * @author Rafael Figueiredo, No 90770
+ * @version 2.0
+ */
 public class Course implements Comparable<Course>, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152204L;
 
+    /** Maximum number of representatives in a course */
     private static final int MAX_REPRESENTATIVES = 7;
-
+    
+    /** Course name */
     private String _name;
+    
+    /** Disciplines that are part of the course */
     private Map<String, Discipline> _disciplines;
+    
+    /** Students in the course (include representatives) */
     private Set<Student> _students;
+    
+    /** Representatives in the course */
     private Set<Student> _representatives;
 
+    /**
+     * Creates a new course.
+     *
+     * @param name - Name of the course
+     */
     Course(String name) {
         _disciplines = new HashMap<>();
         _students = new HashSet<>();
@@ -24,42 +43,104 @@ public class Course implements Comparable<Course>, java.io.Serializable {
         _name = name;
     }
 
-    String getName() {
-        return _name;
-    }
-
+    /**
+     * Adds a new dicipline to the course.
+     * 
+     * @param name - Discipline name
+     * @return The added <code>Discipline</code>
+     */
     Discipline parseDiscipline(String name) {
         addDiscipline(name);
         return _disciplines.get(name);
     }
 
+    /**
+     * Creates and adds a new discipline to the course.
+     * If the discipline already exists, does not add it.
+     * 
+     * @param name - Discipline name
+     * @return true if the discipline was successfully added, false otherwise
+     */
     boolean addDiscipline(String name) {
         if (_disciplines.containsKey(name))
             return false;
 
-        Discipline discipline = new Discipline(name, this);
-        _disciplines.put(name, discipline);
+        _disciplines.put(name, new Discipline(name, this));
         return true;
     }
 
+    /**
+     * Adds a student to the course.
+     * If the student is already in the course, it is not added again.
+     * 
+     * @param student - <code>Student</code> to add
+     * @return true if the Student was successfully added, false otherwise
+     */ 
     boolean addStudent(Student student) {
         return _students.add(student) && (student.isRepresentative() ? addRepresentative(student) : true);
     }
-    
+
+    /**
+     * Adds a representative to the course.
+     * If the course cant have more representatives, then the student is not added.
+     * @see #addStudent(Student)
+     * 
+     * @param student - <code>Student</code> to add as representative
+     * @return true if the student was successfully added, false otherwise
+     */
     boolean addRepresentative(Student student) {
         return maxNumRepresentatives() ? false : _representatives.add(student);
     }
-    
+
+    /**
+     * Removes a representative from the course.
+     * If the passed student is not a representative, it is not removed.
+     * 
+     * @param student - Representative to remove
+     * @return true if the student was a representative in this course, false otherwise
+     */
     boolean removeRepresentative(Student student) {
         return _representatives.remove(student);
     }
-
+    
+    /**
+     * Tells if the course has reached the max number of representatives.
+     * 
+     * @return true if the limit of representatives has been reached, false otherwise
+     */
     boolean maxNumRepresentatives() {
         return getNumRepresentatives() == MAX_REPRESENTATIVES;
     }
 
+    /**
+     * Gets the number of representatives in the course.
+     * 
+     * @return Number of representatives in the course
+     */
     int getNumRepresentatives() {
         return _representatives.size();
+    }
+
+    /**
+     * Gets a specific discipline given its name.
+     * 
+     * @param disName - Name ID of the discipline
+     * @return The discipline whose name was passed in
+     * @throws NoSuchDisciplineIdException When the passed discipline ID is not part of the course
+     */
+    Discipline getDiscipline(String disName) throws NoSuchDisciplineIdException {
+        // *********************
+        // ********TODO*********
+        // *********************
+    }
+
+    /**
+     * Gets the name of the course.
+     * 
+     * @return Course name
+     */
+    String getName() {
+        return _name;
     }
 
     @Override
