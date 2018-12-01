@@ -15,31 +15,31 @@ import sth.core.exception.NoSuchPersonIdException;
  */
 public class DoOpen extends Command<SchoolManager> {
 
-  Input<String> _fileName;
+	Input<String> _fileName;
 
-  /**
-   * @param receiver
-   */
-  public DoOpen(SchoolManager receiver) {
-    super(Label.OPEN, receiver);
-    _fileName = _form.addStringInput(Message.openFile());
-  }
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoOpen(SchoolManager receiver) {
+		super(Label.OPEN, receiver);
+		_fileName = _form.addStringInput(Message.openFile());
+	}
 
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
-  public final void execute() throws DialogException {
-    _form.parse();
-    _receiver.setFileName(_fileName.value());
-
-    try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(_fileName.value()))) {
-      _receiver.openState(objIn.readObject());
-    } catch (FileNotFoundException fnfe) {
-      _display.popup(Message.fileNotFound());
-    } catch (ClassNotFoundException | IOException e) {
-      e.printStackTrace();
-    } catch (NoSuchPersonIdException nsp) {
-      throw new NoSuchPersonException(nsp.getId());
-    }
-  }
-
+	/** @see pt.tecnico.po.ui.Command#execute() */
+	@Override
+	public final void execute() throws DialogException {
+		_form.parse();
+		
+		try {
+			_display.add(_receiver.openState(_fileName.value()));
+			_display.display();
+		} catch (NoSuchPersonIdException nsp) {
+			throw new NoSuchPersonException(nsp.getId());
+		} catch (IOException e) {
+			_display.popup(Message.fileNotFound());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 }

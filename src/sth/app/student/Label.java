@@ -4,16 +4,15 @@ package sth.app.student;
 @SuppressWarnings("nls")
 public interface Label {
 
-  /** 4.4 Menu title. */
-  String TITLE = "Portal do Estudante";
-
-  /** 4.4.1 Deliver project. */
-  String DELIVER_PROJECT = "Entregar projecto";
-
-  /** 4.4.2 Answer survey. */
-  String ANSWER_SURVEY = "Preencher inquérito";
-
-  /** 4.4.3 Show survey results. */
-  String SHOW_SURVEY_RESULTS = "Ver resultados de inquérito";
-
+	/** 4.4 Menu title. */
+	String TITLE = "Portal do Estudante";
+	
+	/** 4.4.1 Deliver project. */
+	String DELIVER_PROJECT = "Entregar projecto";
+	
+	/** 4.4.2 Answer survey. */
+	String ANSWER_SURVEY = "Preencher inquérito";
+	
+	/** 4.4.3 Show survey results. */
+	String SHOW_SURVEY_RESULTS = "Ver resultados de inquérito";
 }

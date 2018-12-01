@@ -11,23 +11,24 @@ import sth.app.representative.RepresentativeMenu;
  */
 public class DoOpenRepresentativeMenu extends Command<SchoolManager> {
 
-  /**
-   * @param receiver
-   */
-  public DoOpenRepresentativeMenu(SchoolManager receiver) {
-    super(Label.OPEN_REPRESENTATIVE_MENU, receiver, new ValidityPredicate<SchoolManager>(receiver) {
-      @Override
-      public boolean isValid() {
-        return _receiver.isLoggedUserRepresentative();
-      }
-    });
-  }
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoOpenRepresentativeMenu(SchoolManager receiver) {
+		super(Label.OPEN_REPRESENTATIVE_MENU, receiver, new ValidityPredicate<SchoolManager>(receiver) {
+			
+			@Override
+			public boolean isValid() {
+				return _receiver.isLoggedUserRepresentative();
+			}
+		});
+	}
 
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
-  public final void execute() {
-    Menu menu = new RepresentativeMenu(_receiver);
-    menu.open();
-  }
-
+	/** @see pt.tecnico.po.ui.Command#execute() */
+	@Override
+	public final void execute() {
+		Menu menu = new RepresentativeMenu(_receiver);
+		menu.open();
+	}
 }

@@ -13,17 +13,17 @@ import sth.app.exception.NoSurveyException;
  */
 public class DoShowSurveyResults extends sth.app.common.ProjectCommand {
 
-  /**
-   * @param receiver
-   */
-  public DoShowSurveyResults(SchoolManager receiver) {
-    super(Label.SHOW_SURVEY_RESULTS, receiver);
-  }
-
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
-  public final void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, NoSurveyException {
-    //FIXME implement command
-  }
-
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoShowSurveyResults(SchoolManager receiver) {
+		super(Label.SHOW_SURVEY_RESULTS, receiver);
+	}
+	
+	/** @see pt.tecnico.po.ui.Command#execute() */
+	@Override
+	public final void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, NoSurveyException {
+		//FIXME implement command
+	}
 }

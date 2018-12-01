@@ -12,18 +12,18 @@ import sth.core.exception.NoSuchDisciplineIdException;
  */
 public class DoOpenSurvey extends sth.app.common.ProjectCommand {
 
-  /**
-   * @param receiver
-   */
-  public DoOpenSurvey(SchoolManager receiver) {
-    super(Label.OPEN_SURVEY, receiver);
-    //FIXME initialize input fields if needed
-  }
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoOpenSurvey(SchoolManager receiver) {
+		super(Label.OPEN_SURVEY, receiver);
+		//FIXME initialize input fields if needed
+	}
 
-  /** @see sth.app.common.ProjectCommand#myExecute() */ 
-  @Override
-  public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException {
-    //FIXME implement command
-  }
-
+	/** @see sth.app.common.ProjectCommand#myExecute() */ 
+	@Override
+	public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException {
+		//FIXME implement command
+	}
 }

@@ -4,17 +4,19 @@ package sth.app.common;
 @SuppressWarnings("nls")
 public interface Message {
 
-  /**
-   * @return prompt for discipline name
-   */
-  public static String requestDisciplineName() {
-    return "Nome da disciplina: ";
-  }
+	/**
+	 * 
+	 * @return prompt for discipline name
+	 */
+	public static String requestDisciplineName() {
+		return "Nome da disciplina: ";
+	}
 
-  /**
-   * @return prompt for project name
-   */
-  public static String requestProjectName() {
-    return "Nome do projecto: ";
-  }
+  	/**
+  	 * 
+  	 * @return prompt for project name
+  	 */
+	public static String requestProjectName() {
+		return "Nome do projecto: ";
+	}
 }

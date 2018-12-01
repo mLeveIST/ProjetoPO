@@ -41,6 +41,28 @@ public class Course implements Comparable<Course>, java.io.Serializable {
         return true;
     }
 
+    /* 
+    boolean addStudent(Student student) {
+        return _students.add(student) && (student.isRepresentative() ? addRepresentative(student) : true);
+    }
+    
+    boolean addRepresentative(Student student) {
+        return maxNumRepresentatives() ? false : _representatives.add(student);
+    }
+    
+    boolean removeRepresentative(Student student) {
+        return _representatives.remove(student);
+    }
+
+    boolean maxNumRepresentatives() {
+        return getNumRepresentatives() == MAX_REPRESENTATIVES;
+    }
+
+    int getNumRepresentatives() {
+        return _representatives.size();
+    }
+    */
+
     boolean addStudent(Student student) {
         if (!student.isRepresentative())
             return _students.add(student);

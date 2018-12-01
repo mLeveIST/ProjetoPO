@@ -14,18 +14,18 @@ import sth.core.exception.NoSuchDisciplineIdException;
  */
 public class DoFinishSurvey extends sth.app.common.ProjectCommand {
 
-  /**
-   * @param receiver
-   */
-  public DoFinishSurvey(SchoolManager receiver) {
-    super(Label.FINISH_SURVEY, receiver);
-    //FIXME initialize input fields if needed
-  }
-
-  /** @see sth.app.common.ProjectCommand#myExecute() */ 
-  @Override
-  public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException {
-    //FIXME implement command
-  }
-
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoFinishSurvey(SchoolManager receiver) {
+		super(Label.FINISH_SURVEY, receiver);
+		//FIXME initialize input fields if needed
+	}
+	
+	/** @see sth.app.common.ProjectCommand#myExecute() */ 
+	@Override
+	public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException {
+		//FIXME implement command
+	}
 }

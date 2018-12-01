@@ -13,16 +13,17 @@ import sth.core.exception.NoSuchProjectIdException;
  */
 public class DoCreateProject extends sth.app.common.ProjectCommand {
 
-  /**
-   * @param receiver
-   */
-  public DoCreateProject(SchoolManager receiver) {
-    super(Label.CREATE_PROJECT, receiver);
-  }
-
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
-  public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateProjectIdException {
-    _receiver.createProject(_discipline.value(), _project.value());
-  }
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoCreateProject(SchoolManager receiver) {
+		super(Label.CREATE_PROJECT, receiver);
+	}
+	
+	/** @see pt.tecnico.po.ui.Command#execute() */
+	@Override
+	public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateProjectIdException {
+		_receiver.createProject(_discipline.value(), _project.value());
+	}
 }

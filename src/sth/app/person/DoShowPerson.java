@@ -8,17 +8,18 @@ import sth.core.SchoolManager;
  */
 public class DoShowPerson extends Command<SchoolManager> {
 
-  /**
-   * @param receiver
-   */
-  public DoShowPerson(SchoolManager receiver) {
-    super(Label.SHOW_PERSON, receiver);
-  }
-
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
-  public final void execute() {
-    _display.addLine(_receiver.showPerson());
-    _display.display();
-  }
+	/**
+	 * 
+	 * @param receiver
+	 */
+	public DoShowPerson(SchoolManager receiver) {
+		super(Label.SHOW_PERSON, receiver);
+	}
+	
+	/** @see pt.tecnico.po.ui.Command#execute() */
+	@Override
+	public final void execute() {
+		_display.addLine(_receiver.showPerson());
+		_display.display();
+	}
 }
