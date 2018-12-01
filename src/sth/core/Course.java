@@ -11,15 +11,16 @@ public class Course implements Comparable<Course>, java.io.Serializable {
     private static final long serialVersionUID = 201811152204L;
 
     private static final int MAX_REPRESENTATIVES = 7;
-    
-    private int _numRepresentatives;
+
     private String _name;
     private Map<String, Discipline> _disciplines;
     private Set<Student> _students;
+    private Set<Student> _representatives;
 
     Course(String name) {
         _disciplines = new HashMap<>();
         _students = new HashSet<>();
+        _representatives = new HashSet<>();
         _name = name;
     }
 
@@ -41,7 +42,6 @@ public class Course implements Comparable<Course>, java.io.Serializable {
         return true;
     }
 
-    /* 
     boolean addStudent(Student student) {
         return _students.add(student) && (student.isRepresentative() ? addRepresentative(student) : true);
     }
@@ -60,33 +60,6 @@ public class Course implements Comparable<Course>, java.io.Serializable {
 
     int getNumRepresentatives() {
         return _representatives.size();
-    }
-    */
-
-    boolean addStudent(Student student) {
-        if (!student.isRepresentative())
-            return _students.add(student);
-
-        else if (addNumRepresentatives())
-            return _students.add(student);
-
-        return false;
-    }
-
-    boolean addNumRepresentatives() {
-        if (_numRepresentatives == MAX_REPRESENTATIVES)
-            return false;
-
-        _numRepresentatives++;
-        return true;
-    }
-
-    void subNumRepresentatives() {
-        _numRepresentatives--;
-    }
-
-    int getNumRepresentatives() {
-        return _numRepresentatives;
     }
 
     @Override
