@@ -16,7 +16,6 @@ import sth.core.exception.NoSuchPersonIdException;
  * Its methods are used by the <code>SchoolManager</code> class to apply commands and by the <code>Parser</code> class
  * to parse information from a file.<br>
  * Objects of this class are also serialized to save the state of the core.
- *
  * @see SchoolManager
  * @see Parser
  *
@@ -47,58 +46,6 @@ public class School implements java.io.Serializable {
 		_name = name;
 		_courses = new HashMap<>();
 		_people = new HashMap<>();
-	}
-
-	/**
-	 * Gets the <code>Person</code> whose id is passed to the method.
-	 *
-	 * @param id - Person identifier number
-	 *
-	 * @return The <code>Person</code> whose ID is passed to the method
-	 * @throws NoSuchPersonIdException When no one with the passed id exists in the school 
-	 */
-	Person getPerson(int id) throws NoSuchPersonIdException {
-		if (!_people.containsKey(id))
-			throw new NoSuchPersonIdException(id);
-		return _people.get(id);
-	}
-
-	/**
-	 * Shows all the people in the school by appending a String with all
-	 * the information of each person.
-	 *
-	 * @return Formatted information of all the people in the school
-	 */
-	String showAllPersons() {
-		String info = "";
-
-		List<Person> people = new ArrayList<>(_people.values());
-		Collections.sort(people);
-
-		for (Person p : people)
-			info += p.toString();
-
-		return info;
-	}
-
-	/**
-	 * Seraches for people that have the string <code>name</code> in their name.
-	 *
-	 * @param name - Name of the person to search for
-	 *
-	 * @return Formatted information about the person(s) after the serach
-	 */
-	String searchPerson(String name) {
-		String info = "";
-
-		List<Person> people = new ArrayList<>(_people.values());
-		Collections.sort(people, Person.getComparatorByName());
-
-		for (Person p : people)
-			if (p.getName().contains(name))
-				info += p.toString();
-
-		return info;
 	}
 
 	/**
@@ -154,5 +101,57 @@ public class School implements java.io.Serializable {
 			return false;
 		_people.put(person.getId(), person);
 		return true;
+	}
+
+	/**
+	 * Gets the <code>Person</code> whose id is passed to the method.
+	 *
+	 * @param id - Person identifier number
+	 *
+	 * @return The <code>Person</code> whose ID is passed to the method
+	 * @throws NoSuchPersonIdException When no one with the passed id exists in the school 
+	 */
+	Person getPerson(int id) throws NoSuchPersonIdException {
+		if (!_people.containsKey(id))
+			throw new NoSuchPersonIdException(id);
+		return _people.get(id);
+	}
+
+	/**
+	 * Shows all the people in the school by appending a String with all
+	 * the information of each person.
+	 *
+	 * @return Formatted information of all the people in the school
+	 */
+	String showAllPersons() {
+		String info = "";
+
+		List<Person> people = new ArrayList<>(_people.values());
+		Collections.sort(people);
+
+		for (Person p : people)
+			info += p.toString();
+
+		return info;
+	}
+
+	/**
+	 * Seraches for people that have the string <code>name</code> in their name.
+	 *
+	 * @param name - Name of the person to search for
+	 *
+	 * @return Formatted information about the person(s) after the serach
+	 */
+	String searchPerson(String name) {
+		String info = "";
+
+		List<Person> people = new ArrayList<>(_people.values());
+		Collections.sort(people, Person.getComparatorByName());
+
+		for (Person p : people)
+			if (p.getName().contains(name))
+				info += p.toString();
+
+		return info;
 	}
 }
