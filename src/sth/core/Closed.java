@@ -12,12 +12,12 @@ public class Closed implements SurveyState {
 
 	@Override
 	public void cancel(Survey survey) {
-		// TODO
+		open(survey);
 	}
 
 	@Override
 	public void open(Survey survey) {
-		// TODO
+		survey.setState(new Opened());
 	}
 
 	@Override
@@ -25,16 +25,16 @@ public class Closed implements SurveyState {
 
 	@Override
 	public void finish(Survey survey) {
-		// TODO
+		survey.setState(new Finalized());
 	}
 
 	@Override
-	public void answer(Survey survey) throws InvalidSurveyOperationException {
-		// TODO
+	public void answer(Survey survey, int id, int time, String comment) throws InvalidSurveyOperationException {
+		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
 	@Override
-	public void showResults(Survey survey) {
-		// TODO
+	public String showResults(Survey survey, SurveyAccess person) {
+		return "(fechado)\n";
 	}
 }

@@ -1,6 +1,7 @@
 package sth.core;
 
 import sth.core.exception.InvalidSurveyOperationException;
+import sth.core.exception.NoAssociatedSurveyException;
 
 /**
  * 
@@ -12,31 +13,31 @@ public class Created implements SurveyState {
 
 	@Override
 	public void cancel(Survey survey) {
-		// TODO
+		survey.getProject().removeSurvey();
 	}
 
 	@Override
 	public void open(Survey survey) {
-		// TODO
+		survey.setState(new Opened());
 	}
 
 	@Override
 	public void close(Survey survey) throws InvalidSurveyOperationException {
-		// TODO
+		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
 	@Override
 	public void finish(Survey survey) throws InvalidSurveyOperationException {
-		// TODO
+		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
 	@Override
-	public void answer(Survey survey) throws InvalidSurveyOperationException {
-		// TODO
+	public void answer(Survey survey, int id, int time, String comment) throws InvalidSurveyOperationException {
+		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
 	@Override
-	public void showResults(Survey survey) {
-		// TODO
+	public String showResults(Survey survey, SurveyAccess person) {
+		return "(por abrir)\n";
 	}
 }

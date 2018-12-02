@@ -1,5 +1,6 @@
 package sth.core;
 
+import sth.core.exception.NoAssociatedSurveyException;
 import sth.core.exception.NonEmptyAssociatedSurveyException;
 import sth.core.exception.InvalidSurveyOperationException;
 
@@ -19,7 +20,7 @@ public interface SurveyState {
 
 	public void finish(Survey survey) throws InvalidSurveyOperationException;
 
-	public void answer(Survey survey) throws InvalidSurveyOperationException;
+	public void answer(Survey survey, int id, int time, String comment) throws InvalidSurveyOperationException;
 
-	public void showResults(Survey survey);
+	public String showResults(Survey survey, SurveyAccess person);
 }

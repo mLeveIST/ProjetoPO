@@ -13,31 +13,34 @@ public class Opened implements SurveyState {
 
 	@Override
 	public void cancel(Survey survey) throws NonEmptyAssociatedSurveyException {
-		// TODO
+		if(survey.hasAnswers())
+			throw new NonEmptyAssociatedSurveyException(survey.getProject().getName());
+		survey.getProject().removeSurvey();
 	}
 
 	@Override
 	public void open(Survey survey) throws InvalidSurveyOperationException {
-		// TODO
+		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
 	@Override
 	public void close(Survey survey) {
-		// TODO
+		survey.setState(new Closed());
 	}
 
 	@Override
 	public void finish(Survey survey) throws InvalidSurveyOperationException {
-		// TODO
+		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
 	@Override
-	public void answer(Survey survey) {
-		// TODO
+	public void answer(Survey survey, int id, int time, String comment) {
+		survey.addId(id);
+		survey.addAnswer(time,comment);
 	}
 
 	@Override
-	public void showResults(Survey survey) {
-		// TODO
+	public String showResults(Survey survey, SurveyAccess person) {
+		return "(aberto)\n";
 	}
 }
