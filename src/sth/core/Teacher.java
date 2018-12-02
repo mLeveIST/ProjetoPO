@@ -6,17 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sth.core.exception.BadEntryException;
-import sth.core.exception.DuplicateProjectIdException;
-import sth.core.exception.NoSuchDisciplineIdException;
-import sth.core.exception.NoSuchProjectIdException;
+import sth.core.exception.*;
 
 /**
  * @author Miguel Levezinho,  No 90756
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Teacher extends Person implements java.io.Serializable {
+public class Teacher extends Person implements SurveyAccess, java.io.Serializable {
 
 	/** Serial number for serialization */
     private static final long serialVersionUID = 201811152208L;
@@ -180,8 +177,13 @@ public class Teacher extends Person implements java.io.Serializable {
 		return info;
     }
 
-    String showSurveyResults(String disName, String projName) {
-    	return null;
-    	// NOT TODO
-    }
+	@Override
+	public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
+		return disName + " - " + projName + " " + getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
+	}
+
+	@Override
+	public String showServey(Survey survey) {
+		return null;
+	}
 }

@@ -1,17 +1,8 @@
 package sth.core;
 
-import sth.core.exception.BadEntryException;
-import sth.core.exception.ClosedProjectException;
-import sth.core.exception.DuplicateAssociatedSurveyException;
-import sth.core.exception.InvalidSurveyOperationException;
-import sth.core.exception.NonEmptyAssociatedSurveyException;
-import sth.core.exception.NoAssociatedSurveyException;
-import sth.core.exception.NoSubmissionsMadeException;
-import sth.core.exception.NoSuchDisciplineIdException;
-import sth.core.exception.NoSuchProjectIdException;
+import sth.core.exception.*;
 
-import java.util.Set; // TODO change to HashMap
-import java.util.TreeSet; // TODO change to Map
+import java.util.*;
 
 /**
  * 
@@ -19,7 +10,7 @@ import java.util.TreeSet; // TODO change to Map
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Student extends Person implements java.io.Serializable {
+public class Student extends Person implements SurveyAccess, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152207L;
@@ -27,8 +18,7 @@ public class Student extends Person implements java.io.Serializable {
     /** Maximum number of disciplines per Student */
     private static final int MAX_NUM_DISCIPLINES = 6;
 
-    private Set<Discipline> _disciplines; // Change to Map<String, Discipline>
-    private int _numDisciplines; // remove
+    private Map<String,Discipline> _disciplines;
 
     /** Student course */
     private Course _course;
@@ -60,8 +50,7 @@ public class Student extends Person implements java.io.Serializable {
     Student(int id, int phoneNum, String name, boolean representative, Course course) {
         super(id, phoneNum, name);
 
-        _disciplines = new TreeSet<>(); // Change to HashMap
-        _numDisciplines = 0; // remove
+        _disciplines = new HashMap<>();
         _representative = representative;
         _course = course;
     }
@@ -104,25 +93,14 @@ public class Student extends Person implements java.io.Serializable {
      */
     boolean addDiscipline(Discipline discipline) {
 
-        // Substitute with commented below
-        if (_disciplines.size() == MAX_NUM_DISCIPLINES || _disciplines.contains(discipline))
-            return false;
-
-        _numDisciplines++;
-        discipline.enrollStudent(this);
-        return _disciplines.add(discipline);
-
-        /* ****
-
         if (maxNumDisciplines() || _disciplines.containsValue(discipline) || discipline.getCourse() != _course)
             return false;
 
         _disciplines.put(discipline.getName(), discipline);
         discipline.enrollStudent(this);
-        
+
         return true;
 
-        **** */ 
     }
 
     /**
@@ -142,8 +120,8 @@ public class Student extends Person implements java.io.Serializable {
     int getNumDisciplines() {
         return _disciplines.size();
     }
-    
-    /*
+
+
     boolean becomeRepresentative() {
         if (_course.addRepresentative(this)) {
             _representative = true;
@@ -156,27 +134,7 @@ public class Student extends Person implements java.io.Serializable {
         _representative = false;
         return _course.removeRepresentative(this);
     }
-    */
 
-    // substitute
-    boolean unmakeRepresentaive() {
-        if (!isRepresentative())
-            return false;
-
-        _course.subNumRepresentatives();
-        _representative = false;
-
-        return true;
-    }
-
-    // substitute
-    boolean makeRepresentaive() {
-        if (isRepresentative() && !_course.addNumRepresentatives())
-            return false;
-
-        _representative = true;
-        return true;
-    }
 
     /**
      * Tells if the student is a representative. 
@@ -204,66 +162,75 @@ public class Student extends Person implements java.io.Serializable {
     String getInfo() {
         String info = "";
 
-        for (Discipline d : _disciplines)
+        List<Discipline> disciplines = new ArrayList<>(_disciplines.values());
+        Collections.sort(disciplines);
+
+        for (Discipline d : disciplines)
             info += "* " + _course.getName() + " - " + d.getName() + "\n";
 
         return info;
     }
 
     Discipline getDiscipline(String disName) throws NoSuchDisciplineIdException {
-        // TODO
-        return null;
+        if(!_disciplines.containsKey(disName))
+            throw new NoSuchDisciplineIdException(disName);
+        return _disciplines.get(disName);
     }
 
     void submitProject(String disName, String projName, String submission) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException {
-        // TODO
+        getDiscipline(disName).getProject(projName).submit(this,submission);
     }
 
     void answerSurvey(String disName, String projName, int time, String comment) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NoSubmissionsMadeException, InvalidSurveyOperationException {
-        // TODO Entrega final
-        // Chamar answerSurvey do projeto
-    }
-
-    // ************************************
-    // ****** NÃO FAZER ESTE COMANDO ******
-    // ************************************
-    String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
-        return null;
-        // NOT TODO
+        getDiscipline(disName).getProject(projName).answerSurvey(getId(), time, comment);
     }
 
     void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateAssociatedSurveyException {
-        // TODO Entrega final
+        getDiscipline(disName).getProject(projName).addSurvey();
     }
 
     void cancelSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-        // TODO Entrega final
+        getDiscipline(disName).getProject(projName).getSurvey().cancel();
     }
 
     void openSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-        // TODO Entrega final
-        // Nao esquecer de notificar observers
+        Discipline discipline = getDiscipline(disName);
+        discipline.getProject(projName).getSurvey().open();
+        discipline.getNotifier().sendAllMessage("");
+
     }
 
     void closeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-        // TODO Entrega final
+        getDiscipline(disName).getProject(projName).getSurvey().close();
     }
 
     void finalizeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-        // TODO Entrega final
-        // Nao esquecer de notificar observers
+        Discipline discipline = getDiscipline(disName);
+        discipline.getProject(projName).getSurvey().finish();
+        discipline.getNotifier().sendAllMessage("");
     }
 
     String showSurveyResults(String disName) throws NoSuchDisciplineIdException {
-        return null;
-        // TODO
+        return getDiscipline(disName).showSurveys(this);
+
     }
 
     void enableNotifications(String disName) throws NoSuchDisciplineIdException {
-        // TODO
+        getDiscipline(disName).giveNotifications(this);
     }
     
     void disableNotifications(String disName) throws NoSuchDisciplineIdException {
-        // TODO
+        getDiscipline(disName).stopNotifications(this);
     }
+
+    @Override
+    public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
+        return disName + " - " + projName + " " + getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
+    }
+
+    @Override
+    public String showServey(Survey survey) {
+        return null;
+    }
+
 }

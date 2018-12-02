@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import sth.core.exception.NoAssociatedSurveyException;
 import sth.core.exception.NonEmptyAssociatedSurveyException;
 import sth.core.exception.InvalidSurveyOperationException;
 
@@ -25,36 +26,53 @@ public class Survey implements java.io.Serializable {
     private List<Answer> _answers;
 
     Survey(Project project) {
-    	// TODO
+    	_project = project;
+    	_state = new Created();
     }
 
-	void cancel() throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-		// TODO
+    Project getProject(){
+    	return _project;
 	}
 
+	void cancel() throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
+    	_state.cancel(this);
+    }
+
 	void open() throws InvalidSurveyOperationException {
-		// TODO
+		_state.open(this);
 	}
 
 	void close() throws InvalidSurveyOperationException {
-		// TODO
+		_state.close(this);
 	}
 
 	void finish() throws InvalidSurveyOperationException {
-		// TODO
+		_state.finish(this);
 	}
 
-	void answer(int id, int time, String comment) throws InvalidSurveyOperationException {
-		// TODO
+	void answer(int id, int time, String comment) throws NoAssociatedSurveyException, InvalidSurveyOperationException {
+		_state.answer(this, id, time, comment);
 	}
 
-	void showResults() {
-		// TODO
+	void addId(int id){
+    	_ids.add(id);
+	}
+
+	void addAnswer(int time, String comment){
+    	_answers.add(new Answer(time,comment));
+	}
+
+	String showResults(SurveyAccess person) {
+		return _state.showResults(this, person);
 	}
 
 	SurveyState getState() {
 		return null;
 		// TODO
+	}
+
+	void setState(SurveyState state){
+    	_state = state;
 	}
 
 	boolean hasAnswers() {
