@@ -1,13 +1,10 @@
 package sth.core;
 
 import sth.core.exception.DuplicateProjectIdException;
+import sth.core.exception.NoAssociatedSurveyException;
 import sth.core.exception.NoSuchProjectIdException;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * 
@@ -122,17 +119,6 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         return _name;
     }
 
-    /*
-
-     * Gets the name of the discipline. 
-     *
-     * @return Discipline name
-     *
-    String getFullName() {
-        return _course.getName() + _name;
-    }
-
-    */
 
     /**
      * Gets the name of the discipline course. 
@@ -173,21 +159,23 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         return equal == 0 ? _name.compareTo(d._name) : equal;
     }
 
-    String showSurveys() {
-        return null;
-        // TODO
+    String showSurveys(SurveyAccess person) {
+        String info = "";
+        List<Project> projects = new ArrayList<>(_projects.values());
+        Collections.sort(projects);
+
+        return info;
     }
 
     Notification getNotifier() {
-        return null;
-        // TODO
+        return _notifier;
     }
 
     void giveNotifications(Person person) {
-        // TODO
+   	    _notifier.attachPerson(person);
     }
     
     void stopNotifications(Person person) {
-        // TODO
+        _notifier.disattachPerson(person);
     }
 }
