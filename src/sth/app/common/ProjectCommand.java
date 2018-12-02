@@ -6,10 +6,9 @@ import pt.tecnico.po.ui.Input;
 
 import sth.core.SchoolManager;
 
-import sth.app.exception.DuplicateProjectException;
 import sth.app.exception.NoSuchDisciplineException;
 import sth.app.exception.NoSuchProjectException;
-import sth.core.exception.DuplicateProjectIdException;
+
 import sth.core.exception.NoSuchDisciplineIdException;
 import sth.core.exception.NoSuchProjectIdException;
 
@@ -23,46 +22,42 @@ import sth.core.exception.NoSuchProjectIdException;
  */
 public abstract class ProjectCommand extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
-  protected final Input<String> _discipline;
-  protected final Input<String> _project;
+    protected final Input<String> _discipline;
+    protected final Input<String> _project;
 
-  /**
-   * @param receiver
-   */
-  public ProjectCommand(String label, SchoolManager receiver) {
-    super(label, receiver);
+    /**
+     * @param receiver
+     */
+    public ProjectCommand(String label, SchoolManager receiver) {
+        super(label, receiver);
 
-    _discipline = _form.addStringInput(Message.requestDisciplineName());
-    _project = _form.addStringInput(Message.requestProjectName());
-  }
-
-  /**
-   * This method represents the specific behavior of each command class
-   * that concerns a project.
-   **/
-  protected abstract void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, DuplicateProjectIdException, DialogException;
-
-  /**
-   * Executes the this command. Parses the form associated with this command and then executes the
-   * specific behavior of this command (should be implemented in myExecute method).
-   * It handles the NoSuchProjectIdException and NoSuchDisciplineIdException and DuplicateProjectIdException.
-   *
-   * @see pt.tecnico.po.ui.Command#execute()
-   **/
-  @Override
-  public final void execute() throws DialogException {
-    _form.parse();
-
-    try {
-      myExecute();
-    } catch (NoSuchProjectIdException nsp) {
-      throw new NoSuchProjectException(_discipline.value(), _project.value());
-    } catch (NoSuchDisciplineIdException nsd) {
-      throw new NoSuchDisciplineException(_discipline.value());
-    } catch (DuplicateProjectIdException dpi) {
-      throw new DuplicateProjectException(_discipline.value(), _project.value());
+        _discipline = _form.addStringInput(Message.requestDisciplineName());
+        _project = _form.addStringInput(Message.requestProjectName());
     }
-  }
 
+    /**
+     * This method represents the specific behavior of each command class
+     * that concerns a project.
+     **/
+    protected abstract void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, DialogException;
+
+    /**
+     * Executes the this command. Parses the form associated with this command and then executes the
+     * specific behavior of this command (should be implemented in myExecute method).
+     * It handles the NoSuchProjectIdException and NoSuchDisciplineIdException and DuplicateProjectIdException.
+     *
+     * @see pt.tecnico.po.ui.Command#execute()
+     **/
+    @Override
+    public final void execute() throws DialogException {
+        _form.parse();
+
+        try {
+            myExecute();
+        } catch (NoSuchProjectIdException nspe) {
+            throw new NoSuchProjectException(_discipline.value(), _project.value());
+        } catch (NoSuchDisciplineIdException nsd) {
+            throw new NoSuchDisciplineException(_discipline.value());
+        }
+    }
 }

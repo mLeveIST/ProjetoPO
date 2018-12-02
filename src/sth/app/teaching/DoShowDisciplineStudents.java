@@ -15,7 +15,6 @@ public class DoShowDisciplineStudents extends Command<SchoolManager> {
 
 	private Input<String> _discipline;
 	
-	
 	public DoShowDisciplineStudents(SchoolManager receiver) {
 		super(Label.SHOW_COURSE_STUDENTS, receiver);
 		_discipline = _form.addStringInput(Message.requestDisciplineName());
