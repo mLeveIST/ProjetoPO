@@ -19,12 +19,12 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
 
     /** Maximum number of students a discipline ca have */
     private static final int MAX_STUDENTS_DISCIPLINE = 200;
+
+    /** Discipline name */
+    private String _name;
     
     /** Course the Discipline is part of */
     private Course _course;
-    
-    /** Discipline name */
-    private String _name;
     
     /** Collection of Students enrolled in the discipline */
     private Set<Student> _students;
@@ -94,6 +94,31 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
 
         _projects.put(projName, new Project(projName));
     }
+
+    /**
+     * Gets a formatted <code>String</code> containing the information of all the students in the discipline. 
+     *
+     * @return The students info
+     */
+    String showStudents() {
+        String info = "";
+
+        for (Student student : _students) {
+            info += student.toString();
+        }
+
+        return info;
+    }
+
+    // ********** TODO **********
+    String showSurveys(SurveyAccess person) {
+        String info = "";
+
+        List<Project> projects = new ArrayList<>(_projects.values());
+        Collections.sort(projects);
+
+        return info;
+    }
     
     /**
      * Gets a project associated with the discipline.
@@ -119,7 +144,6 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         return _name;
     }
 
-
     /**
      * Gets the name of the discipline course. 
      *
@@ -130,18 +154,30 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
     }
 
     /**
-     * Gets a formatted <code>String</code> containing the information of all the students in the discipline. 
+     * Gets the entity that will notify observers of a survey state change to opened or finished.
      *
-     * @return The students info
+     * @return The notifier
      */
-   	String showStudents() {
-        String info = "";
+    Notification getNotifier() {
+        return _notifier;
+    }
 
-        for (Student student : _students) {
-            info += student.toString();
-        }
-
-        return info;
+    /**
+     * Adds a new entity to the list of observers to notify when a survey state changes to opened or finished.
+     *
+     * @param person - The person that wants to be notified
+     */
+    void giveNotifications(Person person) {
+        _notifier.attachPerson(person);
+    }
+    
+    /**
+     * Removes an entity from the list of observers to notify when a survey state changes to opened or finished.
+     *
+     * @param person - The person that wants to be notified
+     */
+    void stopNotifications(Person person) {
+        _notifier.disattachPerson(person);
     }
 
     @Override
@@ -157,25 +193,5 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         int equal = _course.compareTo(d._course);
 
         return equal == 0 ? _name.compareTo(d._name) : equal;
-    }
-
-    String showSurveys(SurveyAccess person) {
-        String info = "";
-        List<Project> projects = new ArrayList<>(_projects.values());
-        Collections.sort(projects);
-
-        return info;
-    }
-
-    Notification getNotifier() {
-        return _notifier;
-    }
-
-    void giveNotifications(Person person) {
-   	    _notifier.attachPerson(person);
-    }
-    
-    void stopNotifications(Person person) {
-        _notifier.disattachPerson(person);
     }
 }
