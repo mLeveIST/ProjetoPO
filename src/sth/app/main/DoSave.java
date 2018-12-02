@@ -25,10 +25,15 @@ public class DoSave extends Command<SchoolManager> {
 	/** @see pt.tecnico.po.ui.Command#execute() */
 	@Override
 	public final void execute() {
+		String fileName = _receiver.getFileName();
+
+		if (_receiver.getFileName() == null) {
+			_form.parse();
+			fileName = _fileName.value();
+		}
+
 		try {
-			if (_fileName == null)
-				_form.parse();
-			_receiver.saveState(_fileName.value());
+			_receiver.saveState(fileName);
 		} catch (IOException e) {
 			_display.popup(Message.fileNotFound());
 		}

@@ -144,10 +144,11 @@ public class SchoolManager {
 	 */
 	public String openState(String fileName) throws NoSuchPersonIdException, IOException, ClassNotFoundException {
 		try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(fileName))) {
-			
+
 			School newSchool = (School) objIn.readObject();
 			_user = newSchool.getPerson(_user.getId());
 			_school = newSchool;
+			setFileName(fileName);
 			return _user.showNotifications();
 		}
 	}
@@ -163,6 +164,7 @@ public class SchoolManager {
 		try (ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(fileName))) {
 			objOut.writeObject(_school);
 		}
+		setFileName(fileName);
 	}
 
 	/**
