@@ -124,17 +124,17 @@ public class Course implements Comparable<Course>, java.io.Serializable {
     }
 
     /**
-     * Gets a specific discipline given its name.
+     * Gets a specific discipline from this course, given its name.
      * 
      * @param disName - Name ID of the discipline
+     *
      * @return The discipline whose name was passed in
      * @throws NoSuchDisciplineIdException When the passed discipline ID is not part of the course
      */
     Discipline getDiscipline(String disName) throws NoSuchDisciplineIdException {
-        return null;
-        // *********************
-        // ********TODO*********
-        // *********************
+        if (!_disciplines.containsKey(disName))
+            throw new NoSuchDisciplineIdException(disName);
+        return _disciplines.get(disName);
     }
 
     /**
