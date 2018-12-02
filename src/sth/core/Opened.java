@@ -13,7 +13,7 @@ public class Opened implements SurveyState {
 
 	@Override
 	public void cancel(Survey survey) throws NonEmptyAssociatedSurveyException {
-		if(survey.hasAnswers())
+		if (survey.hasAnswers())
 			throw new NonEmptyAssociatedSurveyException(survey.getProject().getName());
 		survey.getProject().removeSurvey();
 	}
@@ -35,8 +35,7 @@ public class Opened implements SurveyState {
 
 	@Override
 	public void answer(Survey survey, int id, int time, String comment) {
-		survey.addId(id);
-		survey.addAnswer(time,comment);
+		survey.addAnswer(id, time, comment);
 	}
 
 	@Override

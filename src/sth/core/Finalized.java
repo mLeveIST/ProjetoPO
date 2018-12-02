@@ -33,7 +33,6 @@ public class Finalized implements SurveyState {
 		throw new InvalidSurveyOperationException(survey.getProject().getName());
 	}
 
-	// WARNING DO NOT DO
 	@Override
 	public String showResults(Survey survey, SurveyAccess person) {
 		return "\n" + person.showServey(survey);

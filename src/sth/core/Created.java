@@ -1,7 +1,6 @@
 package sth.core;
 
 import sth.core.exception.InvalidSurveyOperationException;
-import sth.core.exception.NoAssociatedSurveyException;
 
 /**
  * 
