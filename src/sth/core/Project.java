@@ -80,6 +80,7 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 */
 	void close() {
 		_opened = false;
+
 		if (_survey != null) {
 			try {
 				_survey.open();
@@ -99,13 +100,7 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 		String submissions = "";
 		
 		List<Integer> ids = new ArrayList<>(_submissions.keySet());
-		Collections.sort(ids, new Comparator<Integer>() {
-
-			@Override
-			public int compare(Integer id1, Integer id2) {
-				return id1 - id2;
-			}
-		});
+		Collections.sort(ids);
 		
 		for (Integer id : ids)
 			submissions += "* " + id + " - " + _submissions.get(id) + "\n";
