@@ -18,14 +18,15 @@ public class Notification implements java.io.Serializable {
 	Set<Notifiable> _people;
 	
 	/**
-	 * Creates a new notification mechanism.
+	 * Creates a new notification central.
 	 */
 	public Notification() {
 		_people = new HashSet<>();
 	}
 	
 	/**
-	 * 
+	 * Adds a new entity to the list of observers to notify.
+	 *
 	 * @param person - New observer to notify
 	 */
 	public void attachPerson(Notifiable person) {
@@ -33,7 +34,8 @@ public class Notification implements java.io.Serializable {
 	}
 	
 	/**
-	 * 
+	 * Removes an entity from the list of observers to notify.
+	 *
 	 * @param person - Observer to stop notifying
 	 */
 	public void disattachPerson(Notifiable person) {
@@ -41,7 +43,8 @@ public class Notification implements java.io.Serializable {
 	}
 	
 	/**
-	 * 
+	 * Sends a notification to all observers.
+	 *
 	 * @param notification - Notification being sent to all observers
 	 */
 	public void sendAllMessage(String notification) {
