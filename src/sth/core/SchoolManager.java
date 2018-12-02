@@ -245,8 +245,8 @@ public class SchoolManager {
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines given by the teacher
 	 * @throws NoSuchProjectIdException When the passed project ID is not found in the disciline given by the teacher
 	 */
-	public void showSubmissions(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
-		// TODO Entrega final
+	public String showSubmissions(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
+		return ((Teacher) _user).showSubmissions(disName, projName);
 	}
 
 	/**
@@ -275,12 +275,12 @@ public class SchoolManager {
 	 * @throws ClosedProjectException When the project to submit to has already closed
 	 */
 	public void submitProject(String disName, String projName, String submission) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException {
-		// TODO Entrega final
+		((Student) _user).submitProject(disName, projName, submission);
 	}
 
 	/**
 	 * Command that is only aplicable for students in the system.
-	 * Fills the survey of the given project from the give discipline.
+	 * Fills the survey of the given project from the given discipline.
 	 * 
 	 * @param disName  - Name ID of the discipline
 	 * @param projName - Name ID of the project
@@ -293,8 +293,8 @@ public class SchoolManager {
 	 * @throws NoSubmissionsMadeException When the current user did not submit to the project
 	 * @throws InvalidSurveyOperationException When the survey is not opened
 	 */
-	public void fillSurvey(String disName, String projName, int time, String comment) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NoSubmissionsMadeException, InvalidSurveyOperationException {
-		// TODO Entrega final
+	public void answerSurvey(String disName, String projName, int time, String comment) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NoSubmissionsMadeException, InvalidSurveyOperationException {
+		((Student) _user).answerSurvey(disName, projName, time, comment);
 	}
 
 	// ************************************
@@ -313,8 +313,7 @@ public class SchoolManager {
 	 * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
 	 */
 	public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
-		return null;
-		// NOT TODO
+		return ((SurveyAccess) _user).showSurveyResults(disName, projName);
 	}
 
 	/**
@@ -329,7 +328,7 @@ public class SchoolManager {
 	 * @throws DuplicateAssociatedSurveyException When the chosen project already has a survey associated with it
 	 */
 	public void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateAssociatedSurveyException {
-		// TODO Entrega final
+		((Student) _user).createSurvey(disName, projName);
 	}
 
 	/**
@@ -346,7 +345,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being canceled has already been finalized
 	 */
 	public void cancelSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-		// TODO Entrega final
+		((Student) _user).cancelSurvey(disName, projName);
 	}
 
 	/**
@@ -362,7 +361,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being opened is already finalized or opened
 	 */
 	public void openSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-		// TODO Entrega final
+		((Student) _user).openSurvey(disName, projName);
 	}
 
 	/**
@@ -378,7 +377,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being closed is already finalized or not yet opened
 	 */
 	public void closeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-		// TODO Entrega final
+		((Student) _user).closeSurvey(disName, projName);
 	}
 
 	/**
@@ -394,20 +393,19 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being finalized is not closed
 	 */
 	public void finalizeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-		// TODO Entrega final
+		((Student) _user).finalizeSurvey(disName, projName);
 	}
 
 	/**
 	 * Command that is aplicable for representative students in the system.
 	 * Gets a formatted <code>String</code> containing the information of all surveys in a given discipline.
 	 *
-	 * @param disName  - Name ID of the discipline
+	 * @param disName - Name ID of the discipline
 	 * @return The info of the surveys to be visualized
 	 *
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
 	 */
 	public String showSurveyResults(String disName) throws NoSuchDisciplineIdException {
-		return null;
-		// TODO Entrega final
+		return ((Student) _user).showSurveyResults(disName);
 	}
 }
