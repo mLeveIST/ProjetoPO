@@ -1,7 +1,5 @@
 package sth.app.teaching;
 
-import pt.tecnico.po.ui.DialogException;
-import pt.tecnico.po.ui.Input;
 import sth.core.SchoolManager;
 
 import sth.core.exception.NoSuchProjectIdException;
@@ -22,7 +20,7 @@ public class DoCloseProject extends sth.app.common.ProjectCommand {
 	
 	/** @see sth.app.common.ProjectCommand#myExecute() */
 	@Override
-	public final void myExecute() throws DialogException, NoSuchDisciplineIdException, NoSuchProjectIdException {
+	public final void myExecute() throws NoSuchDisciplineIdException, NoSuchProjectIdException {
 		_receiver.closeProject(_discipline.value(), _project.value());
 	}
 }
