@@ -8,6 +8,7 @@ import java.util.Set;
 import sth.core.exception.NoSuchDisciplineIdException;
 
 /**
+ * TODO
  *
  * @author Miguel Levezinho,  No 90756
  * @author Rafael Figueiredo, No 90770
@@ -67,7 +68,12 @@ public class Course implements Comparable<Course>, java.io.Serializable {
         if (_disciplines.containsKey(name))
             return false;
 
-        _disciplines.put(name, new Discipline(name, this));
+        Discipline discipline = new Discipline(name, this);
+        _disciplines.put(name, discipline);
+
+        for (Student r : _representatives)
+            discipline.giveNotifications(r);
+
         return true;
     }
 
@@ -91,7 +97,13 @@ public class Course implements Comparable<Course>, java.io.Serializable {
      * @return true if the student was successfully added, false otherwise
      */
     boolean addRepresentative(Student student) {
-        return maxNumRepresentatives() ? false : _representatives.add(student);
+        if (maxNumRepresentatives() || !_representatives.add(student))
+            return false;
+
+        for (Discipline d : _disciplines.values())
+            d.giveNotifications(student);
+
+        return true;
     }
 
     /**

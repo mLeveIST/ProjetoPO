@@ -299,9 +299,6 @@ public class SchoolManager {
 		((Student) _user).answerSurvey(disName, projName, time, comment);
 	}
 
-	// ************************************
-	// ****** NÃO FAZER ESTE COMANDO ******
-	// ************************************
 	/**
 	 * Command that is aplicable for students and teachers in the system.
 	 * Gets a formatted <code>String</code> containing the information of a survey in a given project in a given discipline.
@@ -310,12 +307,12 @@ public class SchoolManager {
 	 * @param projName - Name ID of the project
 	 * @return The info of the survey to be visualized
 	 *
-	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines the student is enrolled; given by the teacher; or in the course enrolled
+	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines the student is enrolled/given by the teacher
 	 * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
 	 * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
 	 */
 	public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
-		return ((SurveyAccess) _user).showSurveyResults(disName, projName);
+		return ((SurveyShowable) _user).showSurveyAnswers(disName, projName);
 	}
 
 	/**
@@ -327,9 +324,10 @@ public class SchoolManager {
 	 *
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
 	 * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+	 * @throws ClosedProjectException When the chosen project to add a survey to has already closed
 	 * @throws DuplicateAssociatedSurveyException When the chosen project already has a survey associated with it
 	 */
-	public void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateAssociatedSurveyException {
+	public void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException, DuplicateAssociatedSurveyException {
 		((Student) _user).createSurvey(disName, projName);
 	}
 

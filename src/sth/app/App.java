@@ -4,10 +4,13 @@ import static pt.tecnico.po.ui.Dialog.IO;
 
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Menu;
-import sth.core.SchoolManager;
+
 import sth.app.main.MainMenu;
 import sth.app.person.DoLogin;
+
 import sth.core.exception.ImportFileException;
+
+import sth.core.SchoolManager;
 
 /**
  * Main driver for the travel management application.

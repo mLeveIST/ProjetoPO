@@ -17,21 +17,23 @@ public interface SurveyState {
 	 * The actions of this method depend on the surveys state.
 	 * 
 	 * @param survey - Survey to cancel
+	 * @param notifier - Entity that will notify observers if the survey is opened
 	 *
 	 * @throws NonEmptyAssociatedSurveyException When the survey to cancel is opened and has received answers
 	 * @throws InvalidSurveyOperationException When the survey is in a finished state, canceling is impossible
 	 */
-	public void cancel(Survey survey) throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException;
+	public void cancel(Survey survey, Notification notifier) throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException;
 
 	/**
 	 * Opens the passed survey.
 	 * The actions of this method depend on the surveys state.
 	 * 
-	 * @param survey - Survey to open
+	 * @param survey   - Survey to open
+	 * @param notifier - Entity that will notify observers if the survey is opened
 	 *
 	 * @throws InvalidSurveyOperationException When the survey is in a finished state, opening is impossible
 	 */
-	public void open(Survey survey) throws InvalidSurveyOperationException;
+	public void open(Survey survey, Notification notifier) throws InvalidSurveyOperationException;
 
 	/**
 	 * Closes the passed survey.
@@ -47,11 +49,12 @@ public interface SurveyState {
 	 * Finalizes the passed survey.
 	 * The actions of this method depend on the surveys state.
 	 * 
-	 * @param survey - Survey to finalize
+	 * @param survey   - Survey to finalize
+	 * @param notifier - Entity that will notify observers if the survey is finalized
 	 *
 	 * @throws InvalidSurveyOperationException When the survey is in a created or opened state, finalizing is impossible
 	 */
-	public void finish(Survey survey) throws InvalidSurveyOperationException;
+	public void finish(Survey survey, Notification notifier) throws InvalidSurveyOperationException;
 
 	/**
 	 * Adds an answer to the passed survey.
@@ -74,5 +77,5 @@ public interface SurveyState {
 	 * @param person - The person that is asking for the survey results
 	 * @return The results of the survey
 	 */
-	public String showResults(Survey survey, SurveyAccess person);
+	public String showResults(Survey survey, SurveyShowable shower);
 }

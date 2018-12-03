@@ -8,24 +8,29 @@ import sth.core.exception.InvalidSurveyOperationException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Closed implements SurveyState {
+public class Closed implements SurveyState, java.io.Serializable {
+
+	/** Serial number for serialization */
+    private static final long serialVersionUID = 201812022009L;
 
 	@Override
-	public void cancel(Survey survey) {
-		open(survey);
+	public void cancel(Survey survey, Notification notifier) {
+		open(survey, notifier);
 	}
 
 	@Override
-	public void open(Survey survey) {
+	public void open(Survey survey, Notification notifier) {
 		survey.setState(new Opened());
+		notifier.sendAllMessage("Pode preencher inquérito do projecto " + survey.getProject().getName() + " da disciplina " + notifier.getDisName());
 	}
 
 	@Override
 	public void close(Survey survey) {}
 
 	@Override
-	public void finish(Survey survey) {
+	public void finish(Survey survey, Notification notifier) {
 		survey.setState(new Finalized());
+		notifier.sendAllMessage("Resultados do inquérito do projecto " + survey.getProject().getName() + " da disciplina " + notifier.getDisName());
 	}
 
 	@Override
@@ -34,7 +39,7 @@ public class Closed implements SurveyState {
 	}
 
 	@Override
-	public String showResults(Survey survey, SurveyAccess person) {
-		return "(fechado)\n";
+	public String showResults(Survey survey, SurveyShowable shower) {
+		return "(fechado)";
 	}
 }

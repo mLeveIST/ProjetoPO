@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.Input;
+
 import sth.core.SchoolManager;
 
 
@@ -12,7 +13,7 @@ import sth.core.SchoolManager;
  */
 public class DoSave extends Command<SchoolManager> {
 
-	Input<String> _fileName;
+	private Input<String> _fileName;
 	
 	/**
 	 * @param receiver
@@ -27,14 +28,14 @@ public class DoSave extends Command<SchoolManager> {
 	public final void execute() {
 		String fileName = _receiver.getFileName();
 
-		if (_receiver.getFileName() == null) {
+		if (fileName == null) {
 			_form.parse();
 			fileName = _fileName.value();
 		}
 
 		try {
 			_receiver.saveState(fileName);
-		} catch (IOException e) {
+		} catch (IOException ioe) {
 			_display.popup(Message.fileNotFound());
 		}
 	}

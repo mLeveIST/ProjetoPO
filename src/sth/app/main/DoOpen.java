@@ -1,21 +1,23 @@
 package sth.app.main;
 
-import java.io.*;
+import java.io.IOException;
 
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
-import sth.core.SchoolManager;
 
 import sth.app.exception.NoSuchPersonException;
+
 import sth.core.exception.NoSuchPersonIdException;
+
+import sth.core.SchoolManager;
 
 /**
  * 4.1.1. Open existing document.
  */
 public class DoOpen extends Command<SchoolManager> {
 
-	Input<String> _fileName;
+	private Input<String> _fileName;
 
 	/**
 	 * 

@@ -14,13 +14,17 @@ public class Notification implements java.io.Serializable {
 	/** Serial number for serialization */
     private static final long serialVersionUID = 201811152212L;
 
+    /** Name of the discipline that has this notification entity */
+    private String _disciplineName;
+
     /** List of Observers */
 	Set<Notifiable> _people;
 	
 	/**
 	 * Creates a new notification central.
 	 */
-	public Notification() {
+	Notification(String disName) {
+		_disciplineName = disName;
 		_people = new HashSet<>();
 	}
 	
@@ -29,7 +33,7 @@ public class Notification implements java.io.Serializable {
 	 *
 	 * @param person - New observer to notify
 	 */
-	public void attachPerson(Notifiable person) {
+	void attachPerson(Notifiable person) {
 		_people.add(person);
 	}
 	
@@ -38,7 +42,7 @@ public class Notification implements java.io.Serializable {
 	 *
 	 * @param person - Observer to stop notifying
 	 */
-	public void disattachPerson(Notifiable person) {
+	void disattachPerson(Notifiable person) {
 		_people.remove(person);
 	}
 	
@@ -47,8 +51,17 @@ public class Notification implements java.io.Serializable {
 	 *
 	 * @param notification - Notification being sent to all observers
 	 */
-	public void sendAllMessage(String notification) {
+	void sendAllMessage(String notification) {
 		for (Notifiable p : _people)
 			p.addNotification(notification);
+	}
+
+	/**
+	 * Gets the name of the associated discipline.
+	 *
+	 * @return Discipline name
+	 */
+	String getDisName() {
+		return _disciplineName;
 	}
 }

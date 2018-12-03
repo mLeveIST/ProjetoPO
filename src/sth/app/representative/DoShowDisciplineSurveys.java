@@ -3,12 +3,13 @@ package sth.app.representative;
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
+
 import sth.app.common.Message;
 import sth.app.exception.NoSuchDisciplineException;
-import sth.core.SchoolManager;
+
 import sth.core.exception.NoSuchDisciplineIdException;
 
-//FIXME import other classes if needed
+import sth.core.SchoolManager;
 
 /**
  * 4.6.6. Show discipline surveys.
@@ -24,16 +25,17 @@ public class DoShowDisciplineSurveys extends Command<SchoolManager> {
 	public DoShowDisciplineSurveys(SchoolManager receiver) {
 		super(Label.SHOW_DISCIPLINE_SURVEYS, receiver);
 		_discipline = _form.addStringInput(Message.requestDisciplineName());
-
 	}
 
 	/** @see pt.tecnico.po.ui.Command#execute() */
 	@Override
 	public final void execute() throws DialogException {
 		_form.parse();
+
 		try {
-			_receiver.showSurveyResults(_discipline.value());
-		} catch(NoSuchDisciplineIdException x) {
+			_display.add(_receiver.showSurveyResults(_discipline.value()));
+			_display.display();
+		} catch (NoSuchDisciplineIdException nsde) {
 			throw new NoSuchDisciplineException(_discipline.value());
 		}
 	}

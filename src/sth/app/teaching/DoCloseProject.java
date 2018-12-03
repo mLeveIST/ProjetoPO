@@ -1,9 +1,9 @@
 package sth.app.teaching;
 
-import sth.core.SchoolManager;
-
 import sth.core.exception.NoSuchProjectIdException;
 import sth.core.exception.NoSuchDisciplineIdException;
+
+import sth.core.SchoolManager;
 
 /**
  * 4.4.2. Close project.

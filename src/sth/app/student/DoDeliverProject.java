@@ -2,13 +2,14 @@ package sth.app.student;
 
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
-import sth.core.SchoolManager;
 
 import sth.app.exception.NoSuchProjectException;
 
 import sth.core.exception.ClosedProjectException;
 import sth.core.exception.NoSuchDisciplineIdException;
 import sth.core.exception.NoSuchProjectIdException;
+
+import sth.core.SchoolManager;
 
 /**
  * 4.5.1. Deliver project.
@@ -28,7 +29,7 @@ public class DoDeliverProject extends sth.app.common.ProjectCommand {
 	
 	/** @see pt.tecnico.po.ui.Command#execute() */
 	@Override
-	public final void myExecute() throws DialogException, NoSuchProjectIdException, NoSuchDisciplineIdException {
+	public final void myExecute() throws NoSuchProjectIdException, NoSuchDisciplineIdException, DialogException {
 		try {
 			_receiver.submitProject(_discipline.value(), _project.value(), _submission.value());
 		} catch (ClosedProjectException cpe) {

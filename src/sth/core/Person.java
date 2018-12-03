@@ -142,7 +142,7 @@ public abstract class Person implements Notifiable, Comparable<Person>, java.io.
 	abstract String getType();
 
 	/**
-	 * Gets a persons information, formatted accordingly
+	 * Gets a persons information, formatted accordingly.
 	 *
 	 * @return The person info
 	 */

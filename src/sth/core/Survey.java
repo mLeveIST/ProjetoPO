@@ -48,27 +48,33 @@ public class Survey implements java.io.Serializable {
     Survey(Project project) {
     	_project = project;
     	_state = new Created();
+    	_ids = new HashSet<>();
+    	_answers = new ArrayList<>();
     }
 
     /**
 	 * Cancels the survey.
 	 * The actions of this method depend on the surveys state.
 	 *
+	 * @param notifier - Entity that will notify observers if the survey is opened
+	 *
 	 * @throws NonEmptyAssociatedSurveyException When the survey to cancel is opened and has received answers
 	 * @throws InvalidSurveyOperationException When the survey is in a finished state, canceling is impossible
 	 */
-	void cancel() throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-    	_state.cancel(this);
+	void cancel(Notification notifier) throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
+    	_state.cancel(this, notifier);
     }
 
     /**
 	 * Opens the survey.
 	 * The actions of this method depend on the surveys state.
 	 *
+	 * @param notifier - Entity that will notify observers if the survey is opened
+	 *
 	 * @throws InvalidSurveyOperationException When the survey is in a finished state, opening is impossible
 	 */
-	void open() throws InvalidSurveyOperationException {
-		_state.open(this);
+	void open(Notification notifier) throws InvalidSurveyOperationException {
+		_state.open(this, notifier);
 	}
 
 	/**
@@ -84,11 +90,13 @@ public class Survey implements java.io.Serializable {
 	/**
 	 * Finalizes the survey.
 	 * The actions of this method depend on the surveys state.
+	 *
+	 * @param notifier - Entity that will notify observers if the survey is finalized
 	 * 
 	 * @throws InvalidSurveyOperationException When the survey is in a created or opened state, finalizing is impossible
 	 */
-	void finish() throws InvalidSurveyOperationException {
-		_state.finish(this);
+	void finish(Notification notifier) throws InvalidSurveyOperationException {
+		_state.finish(this, notifier);
 	}
 
 	/**
@@ -112,8 +120,8 @@ public class Survey implements java.io.Serializable {
 	 * @param person - The person that is asking for the survey results
 	 * @return The results of the survey
 	 */
-	String showResults(SurveyAccess person) {
-		return _state.showResults(this, person);
+	String showResults(SurveyShowable shower) {
+		return _state.showResults(this, shower);
 	}
 
 	/**
@@ -179,7 +187,7 @@ public class Survey implements java.io.Serializable {
 	 * @return The minimum time the project was solved in 
 	 */
 	int getMinTime() {
-		int min = _answers.get(0).getTime();
+		int min = hasAnswers() ? _answers.get(0).getTime() : 0;
 		
 		for (Answer a : _answers)
 			if (a.getTime() < min)
@@ -208,7 +216,7 @@ public class Survey implements java.io.Serializable {
 	 * @return The maximum time the project was solved in
 	 */
 	int getMaxTime() {
-		int max = _answers.get(0).getTime();
+		int max = 0;
 		
 		for (Answer a : _answers)
 			if (a.getTime() > max)
@@ -226,7 +234,10 @@ public class Survey implements java.io.Serializable {
  	 * @author Rafael Figueiredo, No 90770
  	 * @version 2.0
  	 */
-	private class Answer {
+	private class Answer implements java.io.Serializable {
+
+		/** Serial number for serialization */
+    	private static final long serialVersionUID = 201812030257L;
 
 		/** Time that took to finish the project */
 		private int _time;

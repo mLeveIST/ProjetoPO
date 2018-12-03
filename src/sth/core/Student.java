@@ -1,8 +1,20 @@
 package sth.core;
 
-import sth.core.exception.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import sth.core.exception.BadEntryException;
+import sth.core.exception.ClosedProjectException;
+import sth.core.exception.DuplicateAssociatedSurveyException;
+import sth.core.exception.InvalidSurveyOperationException;
+import sth.core.exception.NoAssociatedSurveyException;
+import sth.core.exception.NoSubmissionsMadeException;
+import sth.core.exception.NoSuchDisciplineIdException;
+import sth.core.exception.NoSuchProjectIdException;
+import sth.core.exception.NonEmptyAssociatedSurveyException;
 
 /**
  * 
@@ -10,7 +22,7 @@ import java.util.*;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Student extends Person implements SurveyAccess, java.io.Serializable {
+public class Student extends Person implements SurveyShowable, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152207L;
@@ -98,6 +110,7 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
 
         _disciplines.put(discipline.getName(), discipline);
         discipline.enrollStudent(this);
+        discipline.giveNotifications(this);
 
         return true;
 
@@ -203,14 +216,14 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
     }
 
     @Override
-    public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
+    public String showSurveyAnswers(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
         return disName + " - " + projName + " " + getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
     }
 
     @Override
-    public String showServey(Survey survey) {
-        return " * Número de respostas: " + survey.getNumAnswers()
-             + " * Tempo médio (horas): " + survey.getAverageTime();
+    public String showAnswers(Survey survey) {
+        return "\n" + " * Número de respostas: " + survey.getNumAnswers()
+                    + " * Tempo médio (horas): " + survey.getAverageTime();
     }
 
     /**
@@ -221,9 +234,10 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
      *
      * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
      * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+     * @throws ClosedProjectException When the chosen project to add a survey to has already closed
      * @throws DuplicateAssociatedSurveyException When the chosen project already has a survey associated with it
      */
-    void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, DuplicateAssociatedSurveyException {
+    void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException, DuplicateAssociatedSurveyException {
         _course.getDiscipline(disName).getProject(projName).addSurvey();
     }
 
@@ -240,7 +254,8 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
      * @throws InvalidSurveyOperationException When the survey being canceled has already been finalized
      */
     void cancelSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-        _course.getDiscipline(disName).getProject(projName).getSurvey().cancel();
+        Discipline discipline = _course.getDiscipline(disName);
+        discipline.getProject(projName).getSurvey().cancel(discipline.getNotifier());
     }
 
     /**
@@ -257,9 +272,7 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
      */
     void openSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
         Discipline discipline = _course.getDiscipline(disName);
-
-        discipline.getProject(projName).getSurvey().open();
-        discipline.getNotifier().sendAllMessage("Pode preencher o inquérito do projeto " + projName + " da disciplina " + disName);
+        discipline.getProject(projName).getSurvey().open(discipline.getNotifier());
     }
 
     /**
@@ -291,9 +304,7 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
      */
     void finalizeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
         Discipline discipline = _course.getDiscipline(disName);
-
-        discipline.getProject(projName).getSurvey().finish();
-        discipline.getNotifier().sendAllMessage("Resultados do inquérito do projeto " + projName + " da disciplina " + disName);
+        discipline.getProject(projName).getSurvey().finish(discipline.getNotifier());
     }
 
     /**
@@ -305,7 +316,7 @@ public class Student extends Person implements SurveyAccess, java.io.Serializabl
      * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
      */
     String showSurveyResults(String disName) throws NoSuchDisciplineIdException {
-        return _course.getDiscipline(disName).showSurveys(this);
+        return _course.getDiscipline(disName).showSurveyResults();
     }
 
     /**

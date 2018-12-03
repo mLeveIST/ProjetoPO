@@ -77,13 +77,15 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 
 	/**
 	 * Closes the project, disabling submissions.
+	 *
+	 * @param notifier - Entity that will notify observers if a associated survey is opened
 	 */
-	void close() {
+	void close(Notification notifier) {
 		_opened = false;
 
-		if (_survey != null) {
+		if (hasSurvey()) {
 			try {
-				_survey.open();
+				_survey.open(notifier);
 			} catch (InvalidSurveyOperationException e) {
 				e.printStackTrace();
 			}
@@ -111,10 +113,13 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	/**
 	 * Adds a survey to this project.
 	 * 
+	 * @throws ClosedProjectException When the chosen project to add a survey to has already closed
 	 * @throws DuplicateAssociatedSurveyException When a survey already exists
 	 */
-	void addSurvey() throws DuplicateAssociatedSurveyException {
-		if (_survey != null)
+	void addSurvey() throws ClosedProjectException, DuplicateAssociatedSurveyException {
+		if (!isOpened())
+			throw new ClosedProjectException(_name);
+		if (hasSurvey())
 			throw new DuplicateAssociatedSurveyException(_name);
 		_survey = new Survey(this);
 	}
@@ -138,7 +143,7 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 * @throws InvalidSurveyOperationException When the survey of this project is not opened for answers or the student has already answered
 	 */
 	void answerSurvey(int id, int time, String comment) throws NoAssociatedSurveyException, NoSubmissionsMadeException, InvalidSurveyOperationException {
-		if (_survey == null)
+		if (!hasSurvey())
 			throw new NoAssociatedSurveyException(_name);
 		if (!hasSubmited(id))
 			throw new NoSubmissionsMadeException(id, _name);
@@ -153,7 +158,7 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 * @throws NoAssociatedSurveyException When the project does not have a survey associated with it
 	 */
 	Survey getSurvey() throws NoAssociatedSurveyException {
-		if (_survey == null)
+		if (!hasSurvey())
 			throw new NoAssociatedSurveyException(_name);
 		return _survey;
 	}
@@ -177,12 +182,12 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	}
 
 	/**
-	 * Tells if the project is opened for submissions.
+	 * Gets the number of submissions made to the project.
 	 * 
-	 * @return true if the project is opened, false otherwise
+	 * @return Number of submissions
 	 */
-	boolean isOpened() {
-		return _opened;
+	int getNumSubmissions() {
+		return _submissions.size();
 	}
 
 	/**
@@ -193,6 +198,25 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 */
 	boolean hasSubmited(int id) {
 		return _submissions.containsKey(id);
+	}
+
+	/**
+	 * Tells if a given student has submited a project.
+	 * 
+	 * @param id - ID of a student 
+	 * @return true if the student whose id is passed has submitted a project, false otherwise
+	 */
+	boolean hasSurvey() {
+		return _survey != null;
+	}
+
+	/**
+	 * Tells if the project is opened for submissions.
+	 * 
+	 * @return true if the project is opened, false otherwise
+	 */
+	boolean isOpened() {
+		return _opened;
 	}
 
 	@Override
@@ -215,7 +239,10 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 * @author Rafael Figueiredo, No 90770
 	 * @version 2.0
  	 */
-	private class Submission {
+	private class Submission implements java.io.Serializable {
+
+		/** Serial number for serialization */
+    	private static final long serialVersionUID = 201812030258L;
 
 		/** Submission content */
 		private String _submission;

@@ -2,7 +2,6 @@ package sth.app.student;
 
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Input;
-import sth.core.SchoolManager;
 
 import sth.app.exception.NoSuchProjectException;
 import sth.app.exception.NoSurveyException;
@@ -12,6 +11,8 @@ import sth.core.exception.NoSuchDisciplineIdException;
 import sth.core.exception.NoAssociatedSurveyException;
 import sth.core.exception.NoSubmissionsMadeException;
 import sth.core.exception.InvalidSurveyOperationException;
+
+import sth.core.SchoolManager;
 
 /**
  * 4.5.2. Answer survey.

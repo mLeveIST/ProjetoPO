@@ -1,10 +1,17 @@
 package sth.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import sth.core.exception.DuplicateProjectIdException;
 import sth.core.exception.NoAssociatedSurveyException;
 import sth.core.exception.NoSuchProjectIdException;
-
-import java.util.*;
 
 /**
  * 
@@ -12,7 +19,7 @@ import java.util.*;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Discipline implements Comparable<Discipline>, java.io.Serializable {
+public class Discipline implements SurveyShowable, Comparable<Discipline>, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152205L;
@@ -52,7 +59,7 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         _teachers = new HashSet<>();
         _projects = new HashMap<>();
         
-        _notifier = new Notification();
+        _notifier = new Notification(name);
     }
 
     /**
@@ -110,14 +117,39 @@ public class Discipline implements Comparable<Discipline>, java.io.Serializable 
         return info;
     }
 
-    // ********** TODO **********
-    String showSurveys(SurveyAccess person) {
+    /**
+     * Gets a formatted <code>String</code> containing the information of a survey in a given project in a given discipline.
+     *
+     * @param disName  - Name ID of the discipline
+     * @param projName - Name ID of the project
+     * @return The info of the survey to be visualized
+     */
+    String showSurveyResults() {
         String info = "";
 
         List<Project> projects = new ArrayList<>(_projects.values());
         Collections.sort(projects);
 
+        for (Project p : projects) {
+            System.out.println(p.hasSurvey());
+            try {
+                info += showSurveyAnswers(_name, p.getName()) + p.getSurvey().showResults(this) + "\n";
+            } catch (NoAssociatedSurveyException nase) {
+                continue;
+            }
+        }
         return info;
+    }
+
+    @Override
+    public String showSurveyAnswers(String disName, String projName) {
+        return disName + " - " + projName + " ";
+    }
+
+    @Override
+    public String showAnswers(Survey survey) {
+        return survey.getNumAnswers() + "- respostas - " 
+             + survey.getAverageTime() + " horas";
     }
     
     /**
