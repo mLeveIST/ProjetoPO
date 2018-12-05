@@ -34,9 +34,8 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
 
     /** Student course */
     private Course _course;
-    
-    /** true if the Student is a representative, false otherwise */
-    private boolean _representative;
+
+    private Representative _representative;
 
     /**
      * Creates a new student without a set course.
@@ -63,7 +62,7 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
         super(id, phoneNum, name);
 
         _disciplines = new HashMap<>();
-        _representative = representative;
+        _representative = representative ? new Representative() : null;
         _course = course;
     }
 
@@ -104,13 +103,11 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
      * @return true if the discipline was added, false otherwise
      */
     boolean addDiscipline(Discipline discipline) {
-
         if (maxNumDisciplines() || _disciplines.containsValue(discipline) || discipline.getCourse() != _course)
             return false;
 
         _disciplines.put(discipline.getName(), discipline);
-        discipline.enrollStudent(this);
-        discipline.giveNotifications(this);
+        discipline.addStudent(this);
 
         return true;
 
@@ -141,7 +138,7 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
      */
     boolean becomeRepresentative() {
         if (_course.addRepresentative(this)) {
-            _representative = true;
+            _representative = new Representative();
             return true;
         }
         return false;
@@ -153,7 +150,7 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
      * @return true if the Student became normal, false if the student was not a representative
      */
     boolean unbecomeRepresentative() {
-        _representative = false;
+        _representative = null;
         return _course.removeRepresentative(this);
     }
 
@@ -163,7 +160,7 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
      * @return true if the Student is a representative, false otherwise
      */
     boolean isRepresentative() {
-        return _representative;
+        return _representative != null;
     }
 
     /**
@@ -215,108 +212,114 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
         getDiscipline(disName).getProject(projName).answerSurvey(getId(), time, comment);
     }
 
+    Representative asRepresentative() {
+        return _representative;
+    }
+
     @Override
-    public String showSurveyAnswers(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
-        return disName + " - " + projName + " " + getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
+    public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
+        return getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
     }
 
     @Override
     public String showAnswers(Survey survey) {
         return "\n" + " * Número de respostas: " + survey.getNumAnswers()
-                    + " * Tempo médio (horas): " + survey.getAverageTime();
+             + "\n" + " * Tempo médio (horas): " + survey.getAverageTime();
     }
 
-    /**
-     * Creates a new survey for a given project of a given discipline.
-     * 
-     * @param disName  - Name ID of the discipline
-     * @param projName - Name ID of the project
-     *
-     * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
-     * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
-     * @throws ClosedProjectException When the chosen project to add a survey to has already closed
-     * @throws DuplicateAssociatedSurveyException When the chosen project already has a survey associated with it
-     */
-    void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException, DuplicateAssociatedSurveyException {
-        _course.getDiscipline(disName).getProject(projName).addSurvey();
-    }
+    class Representative implements SurveyShowable, java.io.Serializable {
 
-    /**
-     * Cancels an existing survey in a given project of a given discipline.
-     * 
-     * @param disName  - Name ID of the discipline
-     * @param projName - Name ID of the project
-     *
-     * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
-     * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
-     * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
-     * @throws NonEmptyAssociatedSurveyException When the survey being canceled has already received answers
-     * @throws InvalidSurveyOperationException When the survey being canceled has already been finalized
-     */
-    void cancelSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-        Discipline discipline = _course.getDiscipline(disName);
-        discipline.getProject(projName).getSurvey().cancel(discipline.getNotifier());
-    }
+        /**
+         * Creates a new survey for a given project of a given discipline.
+         * 
+         * @param disName  - Name ID of the discipline
+         * @param projName - Name ID of the project
+         *
+         * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
+         * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+         * @throws ClosedProjectException When the chosen project to add a survey to has already closed
+         * @throws DuplicateAssociatedSurveyException When the chosen project already has a survey associated with it
+         */
+        void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException, DuplicateAssociatedSurveyException {
+            _course.getDiscipline(disName).getProject(projName).addSurvey();
+        }
 
-    /**
-     * Opens an existing survey in a given project of a given discipline.
-     * All entities with enabled notifications to the passed dicipline will receive a message if the survey opened.
-     * 
-     * @param disName  - Name ID of the discipline
-     * @param projName - Name ID of the project
-     *
-     * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
-     * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
-     * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
-     * @throws InvalidSurveyOperationException When the survey being opened is already finalized or opened
-     */
-    void openSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-        Discipline discipline = _course.getDiscipline(disName);
-        discipline.getProject(projName).getSurvey().open(discipline.getNotifier());
-    }
+        /**
+         * Cancels an existing survey in a given project of a given discipline.
+         * 
+         * @param disName  - Name ID of the discipline
+         * @param projName - Name ID of the project
+         *
+         * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
+         * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+         * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
+         * @throws NonEmptyAssociatedSurveyException When the survey being canceled has already received answers
+         * @throws InvalidSurveyOperationException When the survey being canceled has already been finalized
+         */
+        void cancelSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
+            Discipline discipline = _course.getDiscipline(disName);
+            discipline.getProject(projName).getSurvey().cancel(discipline);
+        }
 
-    /**
-     * Closes an existing survey in a given porject of a given discipline.
-     * 
-     * @param disName  - Name ID of the discipline
-     * @param projName - Name ID of the project
-     *
-     * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
-     * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
-     * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
-     * @throws InvalidSurveyOperationException When the survey being closed is already finalized or not yet opened
-     */
-    void closeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-        _course.getDiscipline(disName).getProject(projName).getSurvey().close();
-    }
+        /**
+         * Opens an existing survey in a given project of a given discipline.
+         * All entities with enabled notifications to the passed dicipline will receive a message if the survey opened.
+         * 
+         * @param disName  - Name ID of the discipline
+         * @param projName - Name ID of the project
+         *
+         * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
+         * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+         * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
+         * @throws InvalidSurveyOperationException When the survey being opened is already finalized or opened
+         */
+        void openSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
+            Discipline discipline = _course.getDiscipline(disName);
+            discipline.getProject(projName).getSurvey().open(discipline);
+        }
 
-    /**
-     * Finalizes an existing survey in the given porject of a given discipline.
-     * All entities with enabled notifications to the passed dicipline will receive a message if the survey finalizes.
-     * 
-     * @param disName  - Name ID of the discipline
-     * @param projName - Name ID of the project
-     *
-     * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
-     * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
-     * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
-     * @throws InvalidSurveyOperationException When the survey being finalized is not closed
-     */
-    void finalizeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-        Discipline discipline = _course.getDiscipline(disName);
-        discipline.getProject(projName).getSurvey().finish(discipline.getNotifier());
-    }
+        /**
+         * Closes an existing survey in a given porject of a given discipline.
+         * 
+         * @param disName  - Name ID of the discipline
+         * @param projName - Name ID of the project
+         *
+         * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
+         * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+         * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
+         * @throws InvalidSurveyOperationException When the survey being closed is already finalized or not yet opened
+         */
+        void closeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
+            _course.getDiscipline(disName).getProject(projName).getSurvey().close();
+        }
 
-    /**
-     * Gets a formatted <code>String</code> containing the information of all surveys in a given discipline.
-     *
-     * @param disName - Name ID of the discipline
-     * @return The info of the surveys to be visualized
-     *
-     * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
-     */
-    String showSurveyResults(String disName) throws NoSuchDisciplineIdException {
-        return _course.getDiscipline(disName).showSurveyResults();
+        /**
+         * Finalizes an existing survey in the given porject of a given discipline.
+         * All entities with enabled notifications to the passed dicipline will receive a message if the survey finalizes.
+         * 
+         * @param disName  - Name ID of the discipline
+         * @param projName - Name ID of the project
+         *
+         * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
+         * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
+         * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
+         * @throws InvalidSurveyOperationException When the survey being finalized is not closed
+         */
+        void finalizeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
+            Discipline discipline = _course.getDiscipline(disName);
+            discipline.getProject(projName).getSurvey().finish(discipline);
+        }
+
+        @Override
+        public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException {
+            return _course.getDiscipline(disName).showSurveyResults(this);
+        }
+
+        @Override
+        public String showAnswers(Survey survey) {
+            return "- " + survey.getNumAnswers()  + " respostas - " 
+                        + survey.getAverageTime() + " horas";
+        }
     }
 
     /**
@@ -326,7 +329,7 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
      * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines the student is enrolled
      */
     void enableNotifications(String disName) throws NoSuchDisciplineIdException {
-        getDiscipline(disName).giveNotifications(this);
+        getDiscipline(disName).addNotifiable(this);
     }
     
     /**
@@ -336,12 +339,12 @@ public class Student extends Person implements SurveyShowable, java.io.Serializa
      * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines the student is enrolled
      */
     void disableNotifications(String disName) throws NoSuchDisciplineIdException {
-        getDiscipline(disName).stopNotifications(this);
+        getDiscipline(disName).removeNotifiable(this);
     }
 
     @Override
     String getType() {
-        return _representative ? "DELEGADO" : "ALUNO";
+        return isRepresentative() ? "DELEGADO" : "ALUNO";
     }
 
     @Override

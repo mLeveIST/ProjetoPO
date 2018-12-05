@@ -2,9 +2,7 @@ package sth.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-//import java.util.HashMap;
 import java.util.List;
-//import java.util.Map;
 
 import sth.core.exception.BadEntryException;
 import sth.core.exception.DuplicateProjectIdException;
@@ -26,7 +24,6 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 
 	/** Disciplines the teacher gives */
 	private List<Discipline> _disciplines;
-	//private Map<String, Discipline> _disciplines;
 
 	/**
 	 * Creates a new teacher.
@@ -38,7 +35,6 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	Teacher(int id, int phoneNum, String name) {
 		super(id, phoneNum, name);
 
-		//_disciplines = new HashMap<>();
 		_disciplines = new ArrayList<>();
 	}
 
@@ -62,14 +58,11 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	 * @return true if the discipline was added, false otherwise
 	 */
 	boolean addDiscipline(Discipline discipline) {
-		//if (_disciplines.containsValue(discipline))
 		if (_disciplines.contains(discipline))
 			return false;
 
-		//_disciplines.put(discipline.getName(), discipline);
 		_disciplines.add(discipline);
 		discipline.addTeacher(this);
-		discipline.giveNotifications(this);
 
 		return true;
 	}
@@ -98,7 +91,7 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	 */
 	void closeProject(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException {
 		Discipline discipline = getDiscipline(disName);
-		discipline.getProject(projName).close(discipline.getNotifier());
+		discipline.getProject(projName).close(discipline);
 	}
 
 	/**
@@ -129,15 +122,15 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	}
 
 	@Override
-	public String showSurveyAnswers(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
-		return disName + " - " + projName + " " + getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
+	public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
+		return getDiscipline(disName).getProject(projName).getSurvey().showResults(this);
 	}
 
 	@Override
 	public String showAnswers(Survey survey) {
 		return "\n" + " * Número de submissões: " + survey.getProject().getNumSubmissions()
-			 		+ " * Número de respostas: " + survey.getNumAnswers()
-			 		+ " * Tempos de resolução (horas) (mínimo, médio, máximo): " + survey.getMinTime()
+			 + "\n" + " * Número de respostas: "  + survey.getNumAnswers()
+			 + "\n" + " * Tempos de resolução (horas) (mínimo, médio, máximo): " + survey.getMinTime()
 		 													   	   		  + ", " + survey.getAverageTime()
 		 													   	   		  + ", " + survey.getMaxTime();
 	}
@@ -151,10 +144,6 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines given by the teacher
 	 */
 	private Discipline getDiscipline(String disName) throws NoSuchDisciplineIdException {	
-		//if (!_disciplines.containsKey(disName))
-		//	throw new NoSuchDisciplineIdException(disName);
-		//return _disciplines.get(disName);
-
 		for (Discipline d : _disciplines)
 			if (d.getName().equals(disName))
 				return d;
@@ -170,7 +159,7 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines given by the teacher
 	 */
 	void enableNotifications(String disName) throws NoSuchDisciplineIdException {
-        getDiscipline(disName).giveNotifications(this);
+        getDiscipline(disName).addNotifiable(this);
     }
     
     /**
@@ -181,7 +170,7 @@ public class Teacher extends Person implements SurveyShowable, java.io.Serializa
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the discilines given by the teacher
 	 */
     void disableNotifications(String disName) throws NoSuchDisciplineIdException {
-        getDiscipline(disName).stopNotifications(this);
+        getDiscipline(disName).removeNotifiable(this);
     }
 
 	@Override
