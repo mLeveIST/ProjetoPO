@@ -5,7 +5,19 @@ import java.util.Comparator;
 import sth.core.exception.BadEntryException;
 
 /**
- * TODO
+ * Class that represents an abstract person in the system.
+ * A person can be a Student, a Teacher or an Emplyee.
+ * <p>
+ * Design Patterns:
+ * <p>
+ * To ensure an easy and obligatory way to represent a person, a Template method is applied in the toString method of this class,
+ * and two abstract operations are declared (getType and getInfo) to be implemented by the subclasses.
+ * <p>
+ * This class is also part of an Observer structure, taking the place of a concrete Observer by implementing <code>Notifiable</code>.
+ * @see Student
+ * @see Teacher
+ * @see #toString
+ * @see Notifiable
  *
  * @author Miguel Levezinho,  No 90756
  * @author Rafael Figueiredo, No 90770

@@ -91,7 +91,7 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 			try {
 				_survey.open(notifier);
 			} catch (InvalidSurveyOperationException e) {
-				e.printStackTrace();
+				System.out.println("Unexpected core error: Survey state leak");
 			}
 		}
 	}

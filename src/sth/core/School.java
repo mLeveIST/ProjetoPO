@@ -21,7 +21,7 @@ import sth.core.exception.NoSuchPersonIdException;
  *
  * @author Miguel Levezinho,  No 90756
  * @author Rafael Figueiredo, No 90770
- * @version 1.0
+ * @version 2.0
  */
 public class School implements java.io.Serializable {
 	
