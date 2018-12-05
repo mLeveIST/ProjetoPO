@@ -61,8 +61,8 @@ public class Survey implements java.io.Serializable {
 	 * @throws NonEmptyAssociatedSurveyException When the survey to cancel is opened and has received answers
 	 * @throws InvalidSurveyOperationException When the survey is in a finished state, canceling is impossible
 	 */
-	void cancel(Notification notifier) throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-    	_state.cancel(this, notifier);
+	void cancel(Notifier notifier) throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
+    	_state.cancel(notifier);
     }
 
     /**
@@ -73,8 +73,8 @@ public class Survey implements java.io.Serializable {
 	 *
 	 * @throws InvalidSurveyOperationException When the survey is in a finished state, opening is impossible
 	 */
-	void open(Notification notifier) throws InvalidSurveyOperationException {
-		_state.open(this, notifier);
+	void open(Notifier notifier) throws InvalidSurveyOperationException {
+		_state.open(notifier);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class Survey implements java.io.Serializable {
 	 * @throws InvalidSurveyOperationException When the survey is in a created or finished state, closing is impossible
 	 */
 	void close() throws InvalidSurveyOperationException {
-		_state.close(this);
+		_state.close();
 	}
 
 	/**
@@ -95,8 +95,8 @@ public class Survey implements java.io.Serializable {
 	 * 
 	 * @throws InvalidSurveyOperationException When the survey is in a created or opened state, finalizing is impossible
 	 */
-	void finish(Notification notifier) throws InvalidSurveyOperationException {
-		_state.finish(this, notifier);
+	void finish(Notifier notifier) throws InvalidSurveyOperationException {
+		_state.finish(notifier);
 	}
 
 	/**
@@ -110,34 +110,18 @@ public class Survey implements java.io.Serializable {
 	 * @throws InvalidSurveyOperationException When the survey is not in an opened state, answering is impossible
 	 */
 	void answer(int id, int time, String comment) throws NoAssociatedSurveyException, InvalidSurveyOperationException {
-		_state.answer(this, id, time, comment);
+		_state.answer(id, time, comment);
 	}
 
 	/**
 	 * Gets the results of the answers to the survey.
 	 * The actions of this method depend on the surveys state.
 	 * 
-	 * @param person - The person that is asking for the survey results
+	 * @param presenter - The entity that will show the survey results in a specific format
 	 * @return The results of the survey
 	 */
-	String showResults(SurveyShowable shower) {
-		return _state.showResults(this, shower);
-	}
-
-	/**
-	 * Adds an answer to the survey.
-	 *
-	 * @param id 	  - ID of the student answering the survey
-	 * @param time 	  - Time the student took to finish the project
-	 * @param comment - Comment on the project
-	 * @return true if the answer was successfully added, false if the student had already answered
-	 */
-	boolean addAnswer(int id, int time, String comment) {
-		if (_ids.add(id)) {
-    		_answers.add(new Answer(time,comment));
-    		return true;
-		}
-		return false;
+	String showResults(SurveyShowable presenter) {
+		return _project.getDiscipline().getName() + " - " + _project.getName() + " " + _state.showResults(presenter);
 	}
 
 	/**
@@ -156,20 +140,6 @@ public class Survey implements java.io.Serializable {
 	 */
 	int getNumAnswers() {
 		return _answers.size();
-	}
-
-	/**
-	 * Changes the current state of the survey to a new one.
-	 *
-	 * @param state - New state to put the survey on
-	 */
-	void setState(SurveyState state) {
-    	_state = state;
-	}
-
-	SurveyState getState() {
-		return null;
-		// TODO
 	}
 
 	/**
@@ -272,6 +242,243 @@ public class Survey implements java.io.Serializable {
 		 */
 		String getComment() {
 			return _comment;
+		}
+	}
+
+	/**
+	 * Interface that represents an abstract state for a <code>Survey</code> object.
+	 * Lists the different actions a survey can have.
+	 * The passible survey states that already implement this interface are Created, Opened, Closed and Finalized.
+	 * @see Survey
+	 * @see Created
+	 * @see Opened
+	 * @see Closed
+	 * @see Finalized
+	 *
+	 * @version 2.0
+	 */
+	private interface SurveyState {
+
+		/**
+		 * Cancels the survey.
+		 * The actions of this method depend on the surveys state.
+		 * 
+		 * @param notifier - Entity that will notify observers if the survey is opened
+		 *
+		 * @throws NonEmptyAssociatedSurveyException When the survey to cancel is opened and has received answers
+		 * @throws InvalidSurveyOperationException When the survey is in a finished state, canceling is impossible
+		 */
+		public void cancel(Notifier notifier) throws NonEmptyAssociatedSurveyException, InvalidSurveyOperationException;
+
+		/**
+		 * Opens the survey.
+		 * The actions of this method depend on the surveys state.
+		 * 
+		 * @param notifier - Entity that will notify observers if the survey is opened
+		 *
+		 * @throws InvalidSurveyOperationException When the survey is in a finished state, opening is impossible
+		 */
+		public void open(Notifier notifier) throws InvalidSurveyOperationException;
+
+		/**
+		 * Closes the survey.
+		 * The actions of this method depend on the surveys state.
+		 *
+		 * @throws InvalidSurveyOperationException When the survey is in a created or finished state, closing is impossible
+		 */
+		public void close() throws InvalidSurveyOperationException;
+
+		/**
+		 * Finalizes the survey.
+		 * The actions of this method depend on the surveys state.
+		 * 
+		 * @param notifier - Entity that will notify observers if the survey is finalized
+		 *
+		 * @throws InvalidSurveyOperationException When the survey is in a created or opened state, finalizing is impossible
+		 */
+		public void finish(Notifier notifier) throws InvalidSurveyOperationException;
+
+		/**
+		 * Adds an answer to the survey.
+		 * The actions of this method depend on the surveys state.
+		 * 
+		 * @param id 	  - ID of the student answering the survey
+		 * @param time 	  - Time the student took to finish the project
+		 * @param comment - Comment on the project
+		 *
+		 * @throws InvalidSurveyOperationException When the survey is not in an opened state, answering is impossible
+		 */
+		public void answer(int id, int time, String comment) throws InvalidSurveyOperationException;
+
+		/**
+		 * Gets the results of the survey.
+		 * The actions of this method depend on the surveys state.
+		 * 
+		 * @param presenter - The entity that will show the survey results in a specific format
+		 * @return The results of the survey
+		 */
+		public String showResults(SurveyShowable presenter);
+	}
+
+	/**
+	 *
+	 * @version 2.0
+	 */
+	private class Created implements SurveyState, java.io.Serializable {
+
+		/** Serial number for serialization */
+	    private static final long serialVersionUID = 201812022008L;
+
+		@Override
+		public void cancel(Notifier notifier) {
+			_project.removeSurvey();
+		}
+
+		@Override
+		public void open(Notifier notifier) throws InvalidSurveyOperationException {
+			if (_project.isOpened())
+				throw new InvalidSurveyOperationException(_project.getName());
+			_state = new Opened();
+			notifier.notifyAll("Pode preencher inquérito do projecto " + _project.getName() + " da disciplina " + _project.getDiscipline().getName());
+		}
+
+		@Override
+		public void close() throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public void finish(Notifier notifier) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public void answer(int id, int time, String comment) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public String showResults(SurveyShowable presenter) {
+			return "(por abrir)";
+		}
+	}
+
+	/**
+	 *
+	 * @version 2.0
+	 */
+	private class Opened implements SurveyState, java.io.Serializable {
+
+		/** Serial number for serialization */
+	    private static final long serialVersionUID = 201812022006L;
+
+		@Override
+		public void cancel(Notifier notifier) throws NonEmptyAssociatedSurveyException {
+			if (hasAnswers())
+				throw new NonEmptyAssociatedSurveyException(_project.getName());
+			_project.removeSurvey();
+		}
+
+		@Override
+		public void open(Notifier notifier) {}
+
+		@Override
+		public void close() {
+			_state = new Closed();
+		}
+
+		@Override
+		public void finish(Notifier notifier) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public void answer(int id, int time, String comment) {
+			if (_ids.add(id))
+    			_answers.add(new Answer(time, comment));
+		}
+
+		@Override
+		public String showResults(SurveyShowable presenter) {
+			return "(aberto)";
+		}
+	}
+
+	/**
+	 *
+	 * @version 2.0
+	 */
+	private class Closed implements SurveyState, java.io.Serializable {
+
+		/** Serial number for serialization */
+	    private static final long serialVersionUID = 201812022009L;
+
+		@Override
+		public void cancel(Notifier notifier) {
+			open(notifier);
+		}
+
+		@Override
+		public void open(Notifier notifier) {
+			_state = new Opened();
+			notifier.notifyAll("Pode preencher inquérito do projecto " + _project.getName() + " da disciplina " + _project.getDiscipline().getName());
+		}
+
+		@Override
+		public void close() {}
+
+		@Override
+		public void finish(Notifier notifier) {
+			_state = new Finalized();
+			notifier.notifyAll("Resultados do inquérito do projecto " + _project.getName() + " da disciplina " + _project.getDiscipline().getName());
+		}
+
+		@Override
+		public void answer(int id, int time, String comment) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public String showResults(SurveyShowable presenter) {
+			return "(fechado)";
+		}
+	}
+
+	/**
+	 *
+	 * @version 2.0
+	 */
+	private class Finalized implements SurveyState, java.io.Serializable {
+
+		/** Serial number for serialization */
+	    private static final long serialVersionUID = 201812022007L;
+
+		@Override
+		public void cancel(Notifier notifier) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public void open(Notifier notifier) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public void close() throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public void finish(Notifier notifier) {}
+
+		@Override
+		public void answer(int id, int time, String comment) throws InvalidSurveyOperationException {
+			throw new InvalidSurveyOperationException(_project.getName());
+		}
+
+		@Override
+		public String showResults(SurveyShowable presenter) {
+			return presenter.showAnswers(Survey.this);
 		}
 	}
 }
