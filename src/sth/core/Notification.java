@@ -1,8 +1,5 @@
 package sth.core;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * 
  * @author Miguel Levezinho,  No 90756
@@ -11,57 +8,22 @@ import java.util.Set;
  */
 public class Notification implements java.io.Serializable {
 
-	/** Serial number for serialization */
-    private static final long serialVersionUID = 201811152212L;
-
-    /** Name of the discipline that has this notification entity */
-    private String _disciplineName;
-
-    /** List of Observers */
-	Set<Notifiable> _people;
+	/** Message to send as a notification */
+    private String _message;
 	
 	/**
-	 * Creates a new notification central.
+	 * Creates a new notification.
 	 */
-	Notification(String disName) {
-		_disciplineName = disName;
-		_people = new HashSet<>();
-	}
-	
-	/**
-	 * Adds a new entity to the list of observers to notify.
-	 *
-	 * @param person - New observer to notify
-	 */
-	void attachPerson(Notifiable person) {
-		_people.add(person);
-	}
-	
-	/**
-	 * Removes an entity from the list of observers to notify.
-	 *
-	 * @param person - Observer to stop notifying
-	 */
-	void disattachPerson(Notifiable person) {
-		_people.remove(person);
-	}
-	
-	/**
-	 * Sends a notification to all observers.
-	 *
-	 * @param notification - Notification being sent to all observers
-	 */
-	void sendAllMessage(String notification) {
-		for (Notifiable p : _people)
-			p.addNotification(notification);
+	Notification(String message) {
+		_message = message;
 	}
 
 	/**
-	 * Gets the name of the associated discipline.
+	 * Gets the message to send as a notification.
 	 *
-	 * @return Discipline name
+	 * @return Message of the notification
 	 */
-	String getDisName() {
-		return _disciplineName;
+	String getMessage() {
+		return _message;
 	}
 }

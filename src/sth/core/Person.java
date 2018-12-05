@@ -24,9 +24,9 @@ public abstract class Person implements Notifiable, Comparable<Person>, java.io.
 	
 	/** Person name */
 	private String _name;
-	
+
 	/** Notifications from disciplines */
-	private String _messages;
+    private String _messages;
 
 	/** Comparator for sorting persons by their names */
 	private static Comparator<Person> _compByName = new Comparator<Person>() {
@@ -61,17 +61,6 @@ public abstract class Person implements Notifiable, Comparable<Person>, java.io.
 	 */
 	void parseContext(String context, School school) throws BadEntryException {
 		throw new BadEntryException("Should not have extra context: " + context);
-	}
-
-	/**
-	 * Gets the pending notifications of the person.
-	 *
-	 * @return All unseen notifications
-	 */
-	String showNotifications() {
-		String messages = _messages;
-		_messages = "";
-		return messages;
 	}
 
 	/**
@@ -119,10 +108,21 @@ public abstract class Person implements Notifiable, Comparable<Person>, java.io.
 		_phoneNum = newPhoneNum;
 	}
 
-	@Override
-	public void addNotification(String notification) {
-		_messages += notification + "\n";
-	}
+	/**
+     * Gets the pending notifications of the notifiable.
+     *
+     * @return All unseen notifications
+     */
+    String showNotifications() {
+        String messages = _messages;
+        _messages = "";
+        return messages;
+    }
+
+    @Override
+    public void notify(Notification message) {
+        _messages += message.getMessage() + "\n";
+    }
 
 	@Override
 	public int compareTo(Person p) {
@@ -130,7 +130,7 @@ public abstract class Person implements Notifiable, Comparable<Person>, java.io.
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return getType() + "|" + _id + "|" + _phoneNum + "|" + _name + "\n" + getInfo();
 	}
 

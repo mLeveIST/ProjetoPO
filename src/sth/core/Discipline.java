@@ -19,7 +19,7 @@ import sth.core.exception.NoSuchProjectIdException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Discipline implements SurveyShowable, Comparable<Discipline>, java.io.Serializable {
+public class Discipline implements Notifier, Comparable<Discipline>, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152205L;
@@ -42,8 +42,8 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
     /** Discipline projects */
     private Map<String, Project> _projects;
 
-    /** Notifies all interested entities of an opened or finalized survey */
-    private Notification _notifier;
+    /** Colection of observers to be notified when a survey from this disciline opens or finalizes */
+    private Set<Notifiable> _observers;
 
     /**
      * Creates a new Discipline. 
@@ -58,8 +58,7 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
         _students = new TreeSet<>();
         _teachers = new HashSet<>();
         _projects = new HashMap<>();
-        
-        _notifier = new Notification(name);
+        _observers = new HashSet<>();
     }
 
     /**
@@ -71,11 +70,12 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
      * @param student - Student to enroll in the disscipline
      * @return true if the student was added, false if it already was enrolled, or the discipline cap was reached
      */
-    boolean enrollStudent(Student student) {
-        if (_students.size() > MAX_STUDENTS_DISCIPLINE)
+    boolean addStudent(Student student) {
+        if (_students.size() > MAX_STUDENTS_DISCIPLINE || !_students.add(student))
             return false;
 
-        return _students.add(student);
+        addNotifiable(student);
+        return true;
     }
 
     /**
@@ -85,7 +85,11 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
      * @return true if the teacher was added, false if the passed teacher already existed
      */
     boolean addTeacher(Teacher teacher) {
-        return _teachers.add(teacher);
+        if (!_teachers.add(teacher))
+            return false;
+
+        addNotifiable(teacher);
+        return true;
     }
     
     /**
@@ -99,7 +103,7 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
         if (_projects.containsKey(projName))
             throw new DuplicateProjectIdException(_name, projName);
 
-        _projects.put(projName, new Project(projName));
+        _projects.put(projName, new Project(projName, this));
     }
 
     /**
@@ -124,32 +128,20 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
      * @param projName - Name ID of the project
      * @return The info of the survey to be visualized
      */
-    String showSurveyResults() {
+    String showSurveyResults(SurveyShowable presenter) {
         String info = "";
 
         List<Project> projects = new ArrayList<>(_projects.values());
         Collections.sort(projects);
 
         for (Project p : projects) {
-            System.out.println(p.hasSurvey());
             try {
-                info += showSurveyAnswers(_name, p.getName()) + p.getSurvey().showResults(this) + "\n";
+                info += p.getSurvey().showResults(presenter) + "\n";
             } catch (NoAssociatedSurveyException nase) {
                 continue;
             }
         }
         return info;
-    }
-
-    @Override
-    public String showSurveyAnswers(String disName, String projName) {
-        return disName + " - " + projName + " ";
-    }
-
-    @Override
-    public String showAnswers(Survey survey) {
-        return survey.getNumAnswers() + "- respostas - " 
-             + survey.getAverageTime() + " horas";
     }
     
     /**
@@ -168,15 +160,6 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
     }
 
     /**
-     * Gets the name of the discipline. 
-     *
-     * @return Discipline name
-     */
-    String getName() {
-        return _name;
-    }
-
-    /**
      * Gets the name of the discipline course. 
      *
      * @return Discipline course
@@ -186,30 +169,28 @@ public class Discipline implements SurveyShowable, Comparable<Discipline>, java.
     }
 
     /**
-     * Gets the entity that will notify observers of a survey state change to opened or finished.
+     * Gets the name of the discipline. 
      *
-     * @return The notifier
+     * @return Discipline name
      */
-    Notification getNotifier() {
-        return _notifier;
+    String getName() {
+        return _name;
     }
 
-    /**
-     * Adds a new entity to the list of observers to notify when a survey state changes to opened or finished.
-     *
-     * @param person - The person that wants to be notified
-     */
-    void giveNotifications(Person person) {
-        _notifier.attachPerson(person);
+    @Override
+    public void addNotifiable(Notifiable observer) {
+        _observers.add(observer);
     }
     
-    /**
-     * Removes an entity from the list of observers to notify when a survey state changes to opened or finished.
-     *
-     * @param person - The person that wants to be notified
-     */
-    void stopNotifications(Person person) {
-        _notifier.disattachPerson(person);
+    @Override
+    public void removeNotifiable(Notifiable observer) {
+        _observers.remove(observer);
+    }
+
+    @Override
+    public void notifyAll(String message) {
+        for (Notifiable o : _observers)
+            o.notify(new Notification(message));
     }
 
     @Override

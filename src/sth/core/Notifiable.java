@@ -1,10 +1,18 @@
 package sth.core;
 
+/**
+ * TODO
+ *
+ * @author Miguel Levezinho,  No 90756
+ * @author Rafael Figueiredo, No 90770
+ * @version 2.0
+ */
 public interface Notifiable {
 	
-	public void addNotification(String notification);
-
-	//public void enableNotifications(String disName) throws NoSuchDisciplineIdException;
-	
-	//public void disableNotifications(String disName) throws NoSuchDisciplineIdException;
+	/**
+	 * Notifies this observer of a new change in a survey state.
+	 *
+	 * @param message - Notification being sent to all observers
+	 */
+	public void notify(Notification message);
 }
