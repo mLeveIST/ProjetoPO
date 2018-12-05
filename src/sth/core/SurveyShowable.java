@@ -13,7 +13,7 @@ import sth.core.exception.NoSuchProjectIdException;
  */
 public interface SurveyShowable {
 
-	/**
+    /**
      * Gets a formatted <code>String</code> containing the information of a survey in a given project in a given discipline.
      *
      * @param disName  - Name ID of the discipline
@@ -24,7 +24,7 @@ public interface SurveyShowable {
      * @throws NoSuchProjectIdException When the passed project ID is not found in the chosen disciline
      * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
      */
-    public String showSurveyAnswers(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException;
-
+    public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException;
+    
     public String showAnswers(Survey survey);
 }
