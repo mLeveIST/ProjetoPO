@@ -29,6 +29,9 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	
 	/** Project description */
 	private String _description;
+
+	/** Project discipline */
+	private Discipline _discipline;
 	
 	/** true if the project is opened, false otherwise */
 	private boolean _opened;
@@ -44,8 +47,8 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 * 
 	 * @param name - Project name
 	 */
-	Project(String name) {
-		this(name, "Descrição");
+	Project(String name, Discipline discipline) {
+		this(name, "Descrição", discipline);
 	}
 
 	/**
@@ -54,9 +57,10 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 * @param name		  - Project name
 	 * @param description - Project description
 	 */
-	Project(String name, String description) {
+	Project(String name, String description, Discipline discipline) {
 		_name = name;
 		_description = description;
+		_discipline = discipline;
 		_opened = true;
 		_submissions = new HashMap<>();
 	}
@@ -80,7 +84,7 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 *
 	 * @param notifier - Entity that will notify observers if a associated survey is opened
 	 */
-	void close(Notification notifier) {
+	void close(Notifier notifier) {
 		_opened = false;
 
 		if (hasSurvey()) {
@@ -179,6 +183,15 @@ public class Project implements Comparable<Project>, java.io.Serializable {
 	 */
 	String getDescription() {
 		return _description;
+	}
+
+	/**
+	 * Gets the discipline of the project.
+	 * 
+	 * @return Project description
+	 */
+	Discipline getDiscipline() {
+		return _discipline;
 	}
 
 	/**
