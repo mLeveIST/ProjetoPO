@@ -312,7 +312,7 @@ public class SchoolManager {
 	 * @throws NoAssociatedSurveyException When the chosen project does not have a survey associated with it
 	 */
 	public String showSurveyResults(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException {
-		return ((SurveyShowable) _user).showSurveyAnswers(disName, projName);
+		return ((SurveyShowable) _user).showSurveyResults(disName, projName);
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class SchoolManager {
 	 * @throws DuplicateAssociatedSurveyException When the chosen project already has a survey associated with it
 	 */
 	public void createSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, ClosedProjectException, DuplicateAssociatedSurveyException {
-		((Student) _user).createSurvey(disName, projName);
+		((Student) _user).asRepresentative().createSurvey(disName, projName);
 	}
 
 	/**
@@ -345,7 +345,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being canceled has already been finalized
 	 */
 	public void cancelSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, NonEmptyAssociatedSurveyException, InvalidSurveyOperationException {
-		((Student) _user).cancelSurvey(disName, projName);
+		((Student) _user).asRepresentative().cancelSurvey(disName, projName);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being opened is already finalized or opened
 	 */
 	public void openSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-		((Student) _user).openSurvey(disName, projName);
+		((Student) _user).asRepresentative().openSurvey(disName, projName);
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being closed is already finalized or not yet opened
 	 */
 	public void closeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-		((Student) _user).closeSurvey(disName, projName);
+		((Student) _user).asRepresentative().closeSurvey(disName, projName);
 	}
 
 	/**
@@ -393,7 +393,7 @@ public class SchoolManager {
 	 * @throws InvalidSurveyOperationException When the survey being finalized is not closed
 	 */
 	public void finalizeSurvey(String disName, String projName) throws NoSuchDisciplineIdException, NoSuchProjectIdException, NoAssociatedSurveyException, InvalidSurveyOperationException {
-		((Student) _user).finalizeSurvey(disName, projName);
+		((Student) _user).asRepresentative().finalizeSurvey(disName, projName);
 	}
 
 	/**
@@ -406,6 +406,6 @@ public class SchoolManager {
 	 * @throws NoSuchDisciplineIdException When the passed discipline ID is not found in the course the student is part of
 	 */
 	public String showSurveyResults(String disName) throws NoSuchDisciplineIdException {
-		return ((Student) _user).showSurveyResults(disName);
+		return ((Student) _user).asRepresentative().showSurveyResults(disName, "");
 	}
 }
