@@ -72,7 +72,7 @@ public class Course implements Comparable<Course>, java.io.Serializable {
         _disciplines.put(name, discipline);
 
         for (Student r : _representatives)
-            discipline.giveNotifications(r);
+            discipline.addNotifiable(r);
 
         return true;
     }
@@ -101,7 +101,7 @@ public class Course implements Comparable<Course>, java.io.Serializable {
             return false;
 
         for (Discipline d : _disciplines.values())
-            d.giveNotifications(student);
+            d.addNotifiable(student);
 
         return true;
     }
