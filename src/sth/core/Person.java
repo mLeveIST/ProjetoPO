@@ -23,7 +23,7 @@ import sth.core.exception.BadEntryException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public abstract class Person implements Notifiable, Comparable<Person>, java.io.Serializable {
+abstract class Person implements Notifiable, Comparable<Person>, java.io.Serializable {
 
 	/** Serial number for serialization */
     private static final long serialVersionUID = 201811152206L;

@@ -7,7 +7,7 @@ import java.io.Reader;
 
 import sth.core.exception.BadEntryException;
 
-public class Parser {
+class Parser {
 
 	private School _school;
 	private Person _currPerson;

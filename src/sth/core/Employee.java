@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Employee extends Person implements java.io.Serializable {
+class Employee extends Person implements java.io.Serializable {
 
 	/** Serial number for serialization */
     private static final long serialVersionUID = 201811152209L;

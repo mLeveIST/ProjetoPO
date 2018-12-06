@@ -11,7 +11,7 @@ import sth.core.exception.NoSuchProjectIdException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public interface SurveyShowable {
+interface SurveyShowable {
 
     /**
      * Gets a formatted <code>String</code> containing the information of a survey in a given project in a given discipline.

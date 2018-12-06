@@ -6,7 +6,7 @@ package sth.core;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public interface Notifier {
+interface Notifier {
 
 	/**
      * Adds a new entity to the list of observers to notify when a survey state changes to opened or finished.

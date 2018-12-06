@@ -6,7 +6,7 @@ package sth.core;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Notification implements java.io.Serializable {
+class Notification implements java.io.Serializable {
 
 	/** Message to send as a notification */
     private String _message;

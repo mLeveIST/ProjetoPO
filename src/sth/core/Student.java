@@ -22,7 +22,7 @@ import sth.core.exception.NonEmptyAssociatedSurveyException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Student extends Person implements SurveyShowable, java.io.Serializable {
+class Student extends Person implements SurveyShowable, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152207L;

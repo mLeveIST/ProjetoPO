@@ -19,7 +19,7 @@ import sth.core.exception.NoSuchProjectIdException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class Discipline implements Notifier, Comparable<Discipline>, java.io.Serializable {
+class Discipline implements Notifier, Comparable<Discipline>, java.io.Serializable {
 
     /** Serial number for serialization */
     private static final long serialVersionUID = 201811152205L;

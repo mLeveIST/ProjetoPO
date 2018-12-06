@@ -7,7 +7,7 @@ package sth.core;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public interface Notifiable {
+interface Notifiable {
 	
 	/**
 	 * Notifies this observer of a new change in a survey state.

@@ -23,7 +23,7 @@ import sth.core.exception.NoSuchPersonIdException;
  * @author Rafael Figueiredo, No 90770
  * @version 2.0
  */
-public class School implements java.io.Serializable {
+class School implements java.io.Serializable {
 	
 	/** Serial number for serialization */
 	private static final long serialVersionUID = 201810051538L;
