@@ -177,7 +177,7 @@ class Survey implements java.io.Serializable {
 		for (Answer a : _answers)
 			sum += a.getTime();
 		
-		return sum / getNumAnswers();
+		return hasAnswers() ? sum / getNumAnswers() : 0;
 	}
 
 	/**

@@ -16,7 +16,7 @@ import sth.core.SchoolManager;
 public class DoLogin extends Command<SchoolManager> {
 
 	/** Login identifier. */
-	Input<Integer> _login;
+	private Input<Integer> _login;
 	
 	/**
 	 * 
